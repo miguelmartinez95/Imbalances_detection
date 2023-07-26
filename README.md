@@ -20,6 +20,6 @@ Folder to perform imbalance search:
 
 This search is based on 4 decompesation types:
 
-Type 1 (sup): High KPI (> p75) and low thermal gap (<p50) plus dwellings with very high KPI without having a high thermal gap (<p75)
+- Type 1 (sup): High KPI (> p75) and low thermal gap (<p50) plus dwellings with very high KPI without having a high thermal gap (<p75)
 
-Type 3 (inf): Low KPI (< p25) and high thermal gap (>p50) plus dwellings with very low KPI without having a low thermal gap (>p25)
+- Type 3 (inf): Low KPI (< p25) and high thermal gap (>p50) plus dwellings with very low KPI without having a low thermal gap (>p25)
