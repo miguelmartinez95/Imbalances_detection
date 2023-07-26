@@ -612,7 +612,7 @@ def detection(year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bloques,
     l1=np.concatenate([np.repeat('KPI', grupos), np.repeat('KPI i1', grupos), np.repeat('KPI i2', grupos)])
     l2=np.concatenate([np.repeat('Cons', grupos), np.repeat('Cons i1', grupos), np.repeat('Cons i2', grupos)])
     l3=np.concatenate([np.repeat(r'$\Delta T$', grupos), np.repeat(r'$\Delta T$ i1', grupos), np.repeat(r'$\Delta T$ i2', grupos)])
-    l4=list()
+    l4=[]
     for t in range(grupos):
         text = 'Group' + (t+1)
         l4.append(np.repeat(text,3))
