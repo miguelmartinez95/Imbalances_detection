@@ -5,6 +5,7 @@ Scripts and data used for developing the study of imbalances detection through r
 Folder to perform imbalance search:
 
 - Scripts: 
+
 	imbalances_detections.py: main
 
 	functions.py: two specific functions to process the data and perform the detection with plots
