@@ -6,6 +6,29 @@ from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from sklearn.preprocessing import StandardScaler 
 
+
+def two_scales(df, ax1, var, var_lab, y_lab1,y_lab2):
+    ax2 = ax1.twinx()
+    sns.barplot(data=df, x='Grupos', y=var, hue=var_lab, alpha=0.5, ax=ax1)
+    ax1.set_xlabel('time (s)')
+    ax1.set_ylabel(y_lab1)
+    sns.lineplot(data=df['Temp'], hue=df['Temp_lab'], marker='o', sort=False, ax=ax2)
+    ax2.set_ylabel(y_lab2)
+    return ax1, ax2
+
+
+def bar_line_plot(df):
+    fig, (ax1,ax2) = plt.subplots(1,2)
+
+
+    two_scales(df, ax1, 'KPI', 'kpi_lab', 'KPI (W/m\N{2} \cdot \N{DEGREE SIGN} C)',r'$\Delta T (\N{DEGREE SIGN} C)$')
+    two_scales(df, ax2, 'Cons', 'Cons_lab', 'Consumption (W/m\N{2}',r'$\Delta T (\N{DEGREE SIGN} C)$')
+    #sns.barplot(data=df, x='Grupos', y='KPI', hue='kpi_lab', alpha=0.5, ax=ax1)
+    #ax#2 = ax1.twinx()
+    #sns.lineplot(data=df['Temp'], hue=df['Temp_lab'], marker='o', sort=False, ax=ax2)
+
+
+
 def detection(year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bloques,nombres, save_results, path):
     '''
     :param var: KPI
@@ -563,8 +586,6 @@ def detection(year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bloques,
         #ax2.axvline(x=temp_mean2, linewidth=2, color='green', linestyle='dashed')
 
 
-
-
         fig.tight_layout(pad=2.0)
         if save_results == True:
             sep='\\'
@@ -585,8 +606,21 @@ def detection(year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bloques,
         print('kWh bajos y Tº altos:', detection_inf[g])
         #print('kWh bajos y Tº bajos:', detection_inf_inf[g])
 
+    kpi_final = np.concatenate((kpi_group, kpi_red, kpi_green))
+    temp_final = np.concatenate((t_group, t_red, t_green))
+    Q_final = np.concatenate((Q_group, Q_red, Q_green))
+    l1=np.concatenate([np.repeat('KPI', grupos), np.repeat('KPI i1', grupos), np.repeat('KPI i2', grupos)])
+    l2=np.concatenate([np.repeat('Cons', grupos), np.repeat('Cons i1', grupos), np.repeat('Cons i2', grupos)])
+    l3=np.concatenate([np.repeat(r'$\Delta T$', grupos), np.repeat(r'$\Delta T$ i1', grupos), np.repeat(r'$\Delta T$ i2', grupos)])
+    l4=list()
+    for t in range(grupos):
+        text = 'Group' + (t+1)
+        l4.append(np.repeat(text,3))
+    l4 = np.concatenate(l4)
+    df_final = np.concatenate((kpi_final, l1, temp_final, l2, Q_final, l3,l4), axis=1)
+    df_final.columns['KPI','kpi_lab', 'Temp' 'Temp_lab', 'Cons', 'Cons_lab','Grupos']
 
-
+    bar_line_plot(df_final)
 
 
 
