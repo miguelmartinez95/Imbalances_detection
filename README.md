@@ -6,11 +6,11 @@ Folder to perform imbalance search:
 
 - Scripts: 
 
-	imbalances_detections.py: main
+	- imbalances_detections.py: main
 
-	functions.py: two specific functions to process the data and perform the detection with plots
+	- functions.py: two specific functions to process the data and perform the detection with plots
 
-	decompesation_function.py: function to create the thermal environments
+	- decompesation_function.py: function to create the thermal environments
 	
 - Data:
 	Files with data year by year and one agregate
