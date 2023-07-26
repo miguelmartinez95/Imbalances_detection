@@ -616,7 +616,7 @@ def detection(year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bloques,
     for t in range(grupos):
         text = 'Group' + str(t+1)
         l4.append(np.repeat(text,3))
-    l4 = np.concatenate(l4)
+    l4 = np.array([np.concatenate(l4)])
     df_final = np.concatenate((kpi_final, l1, temp_final, l2, Q_final, l3,l4), axis=1)
     df_final.columns['KPI','kpi_lab', 'Temp' 'Temp_lab', 'Cons', 'Cons_lab','Grupos']
 
