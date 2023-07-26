@@ -21,8 +21,8 @@ def bar_line_plot(df):
     fig, (ax1,ax2) = plt.subplots(1,2)
 
 
-    two_scales(df, ax1, 'KPI', 'kpi_lab', 'KPI (W/m\N{2} \cdot \N{DEGREE SIGN} C)',r'$\Delta T (\N{DEGREE SIGN} C)$')
-    two_scales(df, ax2, 'Cons', 'Cons_lab', 'Consumption (W/m\N{2}',r'$\Delta T (\N{DEGREE SIGN} C)$')
+    two_scales(df, ax1, 'KPI', 'kpi_lab', r'KPI (W/m \N{2} \cdot \N{DEGREE SIGN} C)',r'$\Delta T (\N{DEGREE SIGN} C)$')
+    two_scales(df, ax2, 'Cons', 'Cons_lab', r'Consumption (W/m\N{2}',r'$\Delta T (\N{DEGREE SIGN} C)$')
     #sns.barplot(data=df, x='Grupos', y='KPI', hue='kpi_lab', alpha=0.5, ax=ax1)
     #ax#2 = ax1.twinx()
     #sns.lineplot(data=df['Temp'], hue=df['Temp_lab'], marker='o', sort=False, ax=ax2)
