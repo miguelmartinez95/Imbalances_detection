@@ -9,7 +9,7 @@ from functions import data_structure, detection
 
 import sys
 #Ejemplo de path
-sys.path.insert(1, 'E:\Documents\Doctorado\Codigos_CUVI\Descompensaciones_Victoria\Scripts')
+#sys.path.insert(1, 'E:\Documents\Doctorado\Codigos_CUVI\Descompensaciones_Victoria\Scripts')
 
 def decompesation_analisis(path,path2,agregado, start,end,grupos,edificio):
     '''

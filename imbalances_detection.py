@@ -1,7 +1,20 @@
 import sys
+import urllib.request
+
+url1 = 'https://raw.githubusercontent.com/miguelmartinez95/Imbalances_detection/decompensation_function.py'
+url2 = 'https://raw.githubusercontent.com/miguelmartinez95/Imbalances_detection/functions.py'
+url3 = 'https://raw.githubusercontent.com/miguelmartinez95/Imbalances_detection/imbalances_detection.py'
+
+filename, headers = urllib.request.urlretrieve(url1, filename='E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imbalance_detection\decompensation_function.py')
+filename, headers = urllib.request.urlretrieve(url2, filename='E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imbalance_detection\functions.py')
+filename, headers = urllib.request.urlretrieve(url3, filename='E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imbalance_detection\imbalances_detection.py')
+
+
 #Ejemplo de path
-sys.path.insert(1, 'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Scripts')
+sys.path.insert(1, 'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imbalance_detection')
 from decompesation_function import decompesation_analisis
+
+
 
 #Subir datos
 path=r'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Data'
