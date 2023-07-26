@@ -4,10 +4,10 @@ Scripts and data used for developing the study of imbalances detection through r
 
 Folder to perform imbalance search:
 
--Scripts: 
-	imbalances_detections: main
-	functions: two specific functions to process the data and perform the detection with plots
-	decompesation_function: function to create the thermal environments
+- Scripts: 
+	imbalances_detections.py: main
+	functions.py: two specific functions to process the data and perform the detection with plots
+	decompesation_function.py: function to create the thermal environments
 	
 - Data:
 	Files with data year by year and one agregate
