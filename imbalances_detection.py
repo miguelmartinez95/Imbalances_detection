@@ -9,7 +9,7 @@ filename, headers = urllib.request.urlretrieve(url2, filename=r'E:\Documents\Doc
 
 #Ejemplo de path
 sys.path.insert(1, 'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imbalance_detection')
-from decompesation_function import decompesation_analisis
+from decompensation_function import decompesation_analisis
 
 #Subir datos
 path=r'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Data'
