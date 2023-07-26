@@ -154,7 +154,9 @@ def decompesation_analisis(path,path2,agregado, start,end,grupos,edificio):
     #Creamos matrices vacías
     var = np.zeros((consumos.shape[0], consumos.shape[1]))
     var_con = np.zeros((consumos.shape[0], consumos.shape[1]))
-    o=np.where(horas.reset_index(drop=True)<5)[0] #pisos que tienen menos de 5 horas de consumos
+
+    #Detectamos pisos que tienen menos de 5 horas de consumos para luego no tenerlos en cuenta en la última detección
+    o=np.where(horas.reset_index(drop=True)<5)[0]
     o_bool = np.array(horas.reset_index(drop=True)<5)
     
 
@@ -178,9 +180,6 @@ def decompesation_analisis(path,path2,agregado, start,end,grupos,edificio):
             var[i,:]=(np.array(consumos)[i])/(np.array(m2)[:,0]*np.array(diffT)[i])
             var_con[i,:]=(np.array(consumos)[i])/(np.array(m2)[:,0])
 
-    #Fortzamos 0 KPI y consumo específico para los pisos con menos de 5 horas de consumos
-    #var[:,o] = np.tile(0, (var.shape[0],len(o)))
-    #var_con[:,o] = np.tile(0, (var_con.shape[0],len(o)))
     var=pd.DataFrame(var)
     var_con=pd.DataFrame(var_con)
 
