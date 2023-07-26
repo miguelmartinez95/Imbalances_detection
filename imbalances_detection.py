@@ -1,13 +1,13 @@
 import sys
 import urllib.request
 
-url1 = 'https://github.com/miguelmartinez95/Imbalances_detection/blob/main/decompensation_function.py'
-url2 = 'https://github.com/miguelmartinez95/Imbalances_detection/blob/main/functions.py'
-url3 = 'https://github.com/miguelmartinez95/Imbalances_detection/blob/main/imbalances_detection.py'
+url1 = 'https://raw.githubusercontent.com/miguelmartinez95/Imbalances_detection/main/decompensation_function.py'
+url2 = 'https://raw.githubusercontent.com/miguelmartinez95/Imbalances_detection/main/functions.py'
+url3 = 'https://raw.githubusercontent.com/miguelmartinez95/Imbalances_detection/main/imbalances_detection.py'
 
-filename, headers = urllib.request.urlretrieve(url1, filename='E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imbalance_detection\decompensation_function.py')
-filename, headers = urllib.request.urlretrieve(url2, filename='E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imbalance_detection\functions.py')
-filename, headers = urllib.request.urlretrieve(url3, filename='E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imbalance_detection\imbalances_detection.py')
+filename, headers = urllib.request.urlretrieve(url1, filename=r'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imbalance_detection\decompensation_function.py')
+filename, headers = urllib.request.urlretrieve(url2, filename=r'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imbalance_detection\functions.py')
+filename, headers = urllib.request.urlretrieve(url3, filename=r'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imbalance_detection\imbalances_detection.py')
 
 
 #Ejemplo de path
