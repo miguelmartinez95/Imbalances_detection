@@ -618,7 +618,7 @@ def detection(year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bloques,
     l4 = np.concatenate(l4).reshape(-1,1)
     df_final = pd.DataFrame(np.concatenate((kpi_final, l1, temp_final, l2, Q_final, l3,l4), axis=1))
     df_final.columns=['KPI','kpi_lab', 'Temp', 'Temp_lab', 'Cons', 'Cons_lab','Grupos']
-    df_final.loc[:, ['KPI', 'Temp', 'Cons']] = df.loc[:, ['KPI', 'Temp', 'Cons']].apply(pd.to_numeric, error='coerce',axis=1)
+    df_final.loc[:, ['KPI', 'Temp', 'Cons']] = df_final.loc[:, ['KPI', 'Temp', 'Cons']].apply(pd.to_numeric, error='coerce',axis=1)
 
     bar_line_plot(df_final)
 
