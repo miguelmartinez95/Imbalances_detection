@@ -18,7 +18,7 @@ def two_scales(df, ax1, var, var_lab, y_lab1,y_lab2):
 
 
 def bar_line_plot(df):
-    fig, (ax1,ax2) = plt.subplots(1,2)
+    fig, (ax1,ax2) = plt.subplots(1,2, figsize=(15,8))
 
 
     two_scales(df, ax1, 'KPI', 'kpi_lab', r'KPI (W/m \N{2} \cdot \N{DEGREE SIGN} C)',r'$\Delta T (\N{DEGREE SIGN} C)$')
