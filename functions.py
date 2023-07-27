@@ -605,9 +605,9 @@ def detection(year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bloques,
         print('kWh bajos y Tº altos:', detection_inf[g])
         #print('kWh bajos y Tº bajos:', detection_inf_inf[g])
 
-    kpi_final = np.concatenate((kpi_group, kpi_red, kpi_green)).reshape(-1,1).astype(np.float)
-    temp_final = np.concatenate((t_group, t_red, t_green)).reshape(-1,1).astype(np.float)
-    Q_final = np.concatenate((Q_group, Q_red, Q_green)).reshape(-1,1).astype(np.float)
+    kpi_final = np.concatenate((kpi_group, kpi_red, kpi_green)).reshape(-1,1)
+    temp_final = np.concatenate((t_group, t_red, t_green)).reshape(-1,1)
+    Q_final = np.concatenate((Q_group, Q_red, Q_green)).reshape(-1,1)
     l1=np.concatenate((np.repeat('KPI', grupos), np.repeat('KPI i1', grupos), np.repeat('KPI i2', grupos))).reshape(-1,1)
     l2=np.concatenate((np.repeat('Cons', grupos), np.repeat('Cons i1', grupos), np.repeat('Cons i2', grupos))).reshape(-1,1)
     l3=np.concatenate((np.repeat(r'$\Delta T$', grupos), np.repeat(r'$\Delta T$ i1', grupos), np.repeat(r'$\Del]ta T$ i2', grupos))).reshape(-1,1)
@@ -618,6 +618,7 @@ def detection(year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bloques,
     l4 = np.concatenate(l4).reshape(-1,1)
     df_final = pd.DataFrame(np.concatenate((kpi_final, l1, temp_final, l2, Q_final, l3,l4), axis=1))
     df_final.columns=['KPI','kpi_lab', 'Temp', 'Temp_lab', 'Cons', 'Cons_lab','Grupos']
+    df_final.loc[:,['KPI','Temp','Cons']] = df.loc[:,['KPI','Temp','Cons']].apply(pd.to_numeric, error='coerce', axis=1)
 
     bar_line_plot(df_final)
 
