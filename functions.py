@@ -14,7 +14,6 @@ def two_scales(df, ax1, var, var_lab, y_lab1,y_lab2):
     ax1.set_ylabel(y_lab1)
     sns.lineplot(data=df['Temp'], hue=df['Temp_lab'], marker='o', sort=False, ax=ax2)
     ax2.set_ylabel(y_lab2)
-    return ax1, ax2
 
 
 def bar_line_plot(df):
