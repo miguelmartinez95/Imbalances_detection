@@ -4,7 +4,9 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
-from sklearn.preprocessing import StandardScaler 
+from sklearn.preprocessing import StandardScaler
+import matplotlib.dates as mdates
+from datetime import datetime
 
 
 def two_scales(df, ax1, var, var_lab, y_lab1,y_lab2,order):
@@ -47,26 +49,38 @@ def bar_line_plot(df):
     #sns.lineplot(data=df['Temp'], hue=df['Temp_lab'], marker='o', sort=False, ax=ax2)
 
 def temporal_plot(dates,var,diff, grupos, list, imbalances):
-    fig, axs= plt.subplots(grupos,2, figsize=(20,9))
-
     for t in range(grupos):
+        fig, (ax1, ax2)= plt.subplots(1,2, figsize=(20,9))
         kpi, temps = var.iloc[:,list[t]], diff.iloc[:, list[t]]
-        kpi1, temps1 = kpi.iloc[:,imbalances[0]], temps.iloc[:,imbalances[0]]
-        kpi2, temps2 = kpi.iloc[:,imbalances[1]], temps.iloc[:,imbalances[1]]
+        kpi.index = dates
+        temps.index = dates
+        x=[datetime.strptime(str(d), "%Y-%m-%d %H:%M:%S").date() for d in dates]
+        ax1.plot(x,kpi, color='grey')
+        ax2.plot(x,temps, color='grey')
 
-        axs[t,0].plot(dates, kpi, colour='grey')
-        axs[t,0].plot(dates, kpi1, colour='red', linewidth=2, label='Imbalance 1')
-        axs[t,0].plot(dates, kpi2, colour='green', linewidth=2, label='Imbalance 2')
-        axs[t,0].set_ylabel(r'KPI (W/m $^{2}$ $\cdot$ $^\circ$C)', fontsize=23)
-        axs[t,0].set_xlabel('Time', fontsize=23)
-        axs[t,0].legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
+        if len(imbalances[t][0]):
+            kpi1, temps1 = kpi.iloc[:,imbalances[t][0]], temps.iloc[:,imbalances[t][0]]
+            ax1.plot(kpi.index, kpi1, color='red', linewidth=2, label='Imbalance 1')
+            ax2.plot(temps.index, temps1, color='red', linewidth=2, label='Imbalance 1')
 
-        axs[t,1].plot(dates, temps, colour='grey')
-        axs[t,1].plot(dates, temps1, colour='red', linewidth=2, label='Imbalance 1')
-        axs[t,1].plot(dates, temps2, colour='green', linewidth=2, label='Imbalance 2')
-        axs[t,1].set_ylabel(r'$\Delta$ T ($^\circ$C)', fontsize=23)
-        axs[t,1].set_xlabel('Time', fontsize=23)
-        axs[t,1].legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
+        if len(imbalances[t][1]):
+            kpi2, temps2 = kpi.iloc[:, imbalances[t][1]], temps.iloc[:, imbalances[t][1]]
+            ax1.plot(kpi.index, kpi2, color='green', linewidth=2, label='Imbalance 2')
+            ax2.plot(temps.index, temps2, color='green', linewidth=2, label='Imbalance 2')
+
+        ax1.set_ylabel(r'KPI (W/m $^{2}$ $\cdot$ $^\circ$C)', fontsize=23)
+        ax1.set_xlabel('Time', fontsize=23)
+        ax1.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
+        ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        ax1.xaxis.set_major_locator(mdates.DayLocator(interval=15))
+        ax1.tick_params('x', labelrotation=45)
+        ax2.set_ylabel(r'$\Delta$ T ($^\circ$C)', fontsize=23)
+        ax2.set_xlabel('Time', fontsize=23)
+        ax2.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
+        ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        ax2.xaxis.set_major_locator(mdates.DayLocator(interval=15))
+        ax2.tick_params('x', labelrotation=45)
+        plt.show()
 
 
 
@@ -137,6 +151,7 @@ def detection(dates,year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bl
         var_con = var_con.reset_index(drop=True)
         diff = diff.drop(diff.index[ind_out], axis=0)
         diff=diff.reset_index(drop=True)
+        dates = np.delete(dates, ind_out)
     ###########################################################################
     #Calculo de valores concretos para cada piso y para cada variable
     horas = pd.DataFrame(var_con>0).sum(axis=0)
@@ -255,6 +270,8 @@ def detection(dates,year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bl
 
         #Eliminación de los bajos debido a la falta de datos de sus entornos
         matrix= np.delete(matrix, np.array([0,1,2,24,25,26,48,49,50]),0)
+        var= var.drop(var.columns[np.array([0,1,2,24,25,26,48,49,50])],axis=1)
+        diff= diff.drop(diff.columns[np.array([0,1,2,24,25,26,48,49,50])],axis=1)
         o_bool = np.delete(o_bool, np.array([0,1,2,24,25,26,48,49,50]))
         var_con_sum= var_con_sum.drop(var_con_sum.index[np.array([0,1,2,24,25,26,48,49,50])],axis=0)
         nombres= np.delete(nombres, np.array([0,1,2,24,25,26,48,49,50]),0)
@@ -363,6 +380,8 @@ def detection(dates,year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bl
 
         #Eliminación de los bajos debido a la falta de datos de sus entornos
         matrix= np.delete(matrix, np.array([0,1,2,18,19,20,36,37,38]),0)
+        var= var.drop(var.columns[np.array([0,1,2,18,19,20,36,37,38])],axis=1)
+        diff= diff.drop(diff.columns[np.array([0,1,2,18,19,20,36,37,38])],axis=1)
         o_bool= np.delete(o_bool, np.array([0,1,2,18,19,20,36,37,38]))
         var_con_sum = var_con_sum.drop(var_con_sum.index[np.array([0,1,2,18,19,20,36,37,38])], axis=0)
         nombres= np.delete(nombres, np.array([0,1,2,18,19,20,36,37,38]),0)
@@ -459,6 +478,8 @@ def detection(dates,year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bl
     
     df_piso=df_piso.drop(df_piso.index[o], axis=0)
     var_con_sum = var_con_sum.drop(var_con_sum.index[o], axis=0)
+    var_clean = var.drop(var.columns[o], axis=1)
+    diff_clean = diff.drop(diff.columns[o], axis=1)
 
     imb1 = []
     imb2 = []
