@@ -9,7 +9,7 @@ from sklearn.preprocessing import StandardScaler
 
 def two_scales(df, ax1, var, var_lab, y_lab1,y_lab2,order):
     ax2 = ax1.twinx()
-    g=sns.barplot(data=df, x='Grupos', y=var, hue=var_lab, palette=['blue', 'red', 'green'],ax=ax1)
+    g=sns.barplot(data=df, x='Grupos', y=var, edgecolor='black',hue=var_lab, palette=['blue', 'red', 'green'],ax=ax1)
     g.legend_.set_title(None)
     ax1.set_ylabel(y_lab1, fontsize=23)
     ax1.set_xlabel('')
@@ -19,11 +19,15 @@ def two_scales(df, ax1, var, var_lab, y_lab1,y_lab2,order):
         for i, thisbar in enumerate(g.patches):
             # Set a different hatch for each bar
             thisbar.set_hatch('\\')
+        ax1.set_ylim([0, 120])
+    else:
+        ax1.set_ylim([0, 12])
     ax1.legend(loc='upper left', fontsize=16,fancybox=True, framealpha=0.5)
     g2 = sns.lineplot(data=df,x='Grupos', y='Temp' , hue='Temp_lab', marker='o', sort=False, ax=ax2, palette=['blue', 'red', 'green'])
     #g2.legend_.set_title(None)
     ax2.set_ylabel(y_lab2,fontsize=23)
     ax2.set_xlabel('')
+    ax2.set_ylim([0,15])
     ax2.tick_params(axis='x', labelsize=21)
     ax2.tick_params(axis='y', labelsize=22)
     ax2.get_legend().remove()
@@ -36,15 +40,38 @@ def bar_line_plot(df):
 
     two_scales(df, ax1, 'KPI', 'kpi_lab', r'KPI (W/m $^{2}$ $\cdot$ $^\circ$C)',r'$\Delta$ T ($^\circ$C)',1)
     two_scales(df, ax2, 'Cons', 'Cons_lab', r'Consumption (W/m$^{2}$)',r'$\Delta$ T ($^\circ$C)',2)
-    plt.tight_layout()
+    plt.tight_layout(pad=3)
     plt.show()
     #sns.barplot(data=df, x='Grupos', y='KPI', hue='kpi_lab', alpha=0.5, ax=ax1)
     #ax#2 = ax1.twinx()
     #sns.lineplot(data=df['Temp'], hue=df['Temp_lab'], marker='o', sort=False, ax=ax2)
 
+def temporal_plot(dates,var,diff, grupos, list, imbalances):
+    fig, axs= plt.subplots(grupos,2, figsize=(20,9))
+
+    for t in range(grupos):
+        kpi, temps = var.iloc[:,list[t]], diff.iloc[:, list[t]]
+        kpi1, temps1 = kpi.iloc[:,imbalances[0]], temps.iloc[:,imbalances[0]]
+        kpi2, temps2 = kpi.iloc[:,imbalances[1]], temps.iloc[:,imbalances[1]]
+
+        axs[t,0].plot(dates, kpi, colour='grey')
+        axs[t,0].plot(dates, kpi1, colour='red', linewidth=2, label='Imbalance 1')
+        axs[t,0].plot(dates, kpi2, colour='green', linewidth=2, label='Imbalance 2')
+        axs[t,0].set_ylabel(r'KPI (W/m $^{2}$ $\cdot$ $^\circ$C)', fontsize=23)
+        axs[t,0].set_xlabel('Time', fontsize=23)
+        axs[t,0].legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
+
+        axs[t,1].plot(dates, temps, colour='grey')
+        axs[t,1].plot(dates, temps1, colour='red', linewidth=2, label='Imbalance 1')
+        axs[t,1].plot(dates, temps2, colour='green', linewidth=2, label='Imbalance 2')
+        axs[t,1].set_ylabel(r'$\Delta$ T ($^\circ$C)', fontsize=23)
+        axs[t,1].set_xlabel('Time', fontsize=23)
+        axs[t,1].legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
 
 
-def detection(year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bloques,nombres, save_results, path):
+
+
+def detection(dates,year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bloques,nombres, save_results, path):
     '''
     :param var: KPI
     :param var_con: Consumo específico
@@ -418,9 +445,7 @@ def detection(year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bloques,
             plt.savefig(pp +'\\'+ 'g'+str(t) + '.png')
 
     detection_sup = []
-    detection_sup_sup = []
     detection_inf = []
-    detection_inf_inf = []
     df_piso.iloc[np.where(df_piso.iloc[:, 0] < 0)[0], 0] = np.repeat(-0.01, len(np.where(df_piso.iloc[:, 0] < 0)[0]))
     kpi_group= [0 for x in range(grupos)]
     kpi_red= [0 for x in range(grupos)]
@@ -435,7 +460,8 @@ def detection(year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bloques,
     df_piso=df_piso.drop(df_piso.index[o], axis=0)
     var_con_sum = var_con_sum.drop(var_con_sum.index[o], axis=0)
 
-
+    imb1 = []
+    imb2 = []
     for z in range(grupos):
         thermal = df_piso.iloc[list[z], 0].reset_index(drop=True)
         cons_esp = var_con_sum.iloc[list[z]].reset_index(drop=True)
@@ -485,22 +511,23 @@ def detection(year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bloques,
 
         candidates = np.where(thermal > thermal_mean_O)[0]
         candidates2 = np.where(temp < temp_mean_O)[0]
-        candidates_final = np.intersect1d(candidates, candidates2)
+        candidates_final1 = np.intersect1d(candidates, candidates2)
+        imb1.append(candidates_final1)
 
         try:
-            candidates_final = np.union1d(candidates_final, candidates0)
+            candidates_final1 = np.union1d(candidates_final1, candidates0)
             del candidates0
         except:
             pass
 
         #Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 1: KPI, Salto térmico y consumo especifíco
-        detection_sup.append(names[candidates_final])
-        if len(candidates_final) > 0:
-            ax1.barh(candidates_final, thermal.iloc[candidates_final]*1000, color='red')
-            ax2.barh(candidates_final, temp.iloc[candidates_final], color='red')
-            kpi_red[z]= np.round(np.mean(thermal.iloc[candidates_final][thermal.iloc[candidates_final] > 0]), 6)
-            t_red[z]= np.round(np.mean(temp.iloc[candidates_final][temp.iloc[candidates_final] > 0]), 6)
-            Q_red[z]=np.round(np.mean(cons_esp.iloc[candidates_final][cons_esp.iloc[candidates_final] > 0]), 6)
+        detection_sup.append(names[candidates_final1])
+        if len(candidates_final1) > 0:
+            ax1.barh(candidates_final1, thermal.iloc[candidates_final1]*1000, color='red')
+            ax2.barh(candidates_final1, temp.iloc[candidates_final1], color='red')
+            kpi_red[z]= np.round(np.mean(thermal.iloc[candidates_final1][thermal.iloc[candidates_final1] > 0]), 6)
+            t_red[z]= np.round(np.mean(temp.iloc[candidates_final1][temp.iloc[candidates_final1] > 0]), 6)
+            Q_red[z]=np.round(np.mean(cons_esp.iloc[candidates_final1][cons_esp.iloc[candidates_final1] > 0]), 6)
 
 
 
@@ -545,22 +572,23 @@ def detection(year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bloques,
 
         candidates = np.where(thermal < thermal_mean)[0]
         candidates2 = np.where(temp > temp_mean)[0]
-        candidates_final = np.intersect1d(candidates, candidates2)
+        candidates_final2 = np.intersect1d(candidates, candidates2)
+        imb2.append(candidates_final2)
 
         try:
-            candidates_final = np.union1d(candidates_final, candidates0)
+            candidates_final2 = np.union1d(candidates_final2, candidates0)
             del candidates0
         except:
             pass
 
         # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 3: KPI, Salto térmico y consumo especifíco
-        detection_inf.append(names[candidates_final])
-        if len(candidates_final) > 0:
-            ax1.barh(candidates_final, thermal.iloc[candidates_final]*1000, color='green')
-            ax2.barh(candidates_final, temp.iloc[candidates_final], color='green')
-            kpi_green[z]= np.round(np.mean(thermal.iloc[candidates_final][thermal.iloc[candidates_final] > 0]), 6)
-            t_green[z]= np.round(np.mean(temp.iloc[candidates_final][temp.iloc[candidates_final] > 0]), 6)
-            Q_green[z]=np.round(np.mean(cons_esp.iloc[candidates_final][cons_esp.iloc[candidates_final] > 0]), 6)
+        detection_inf.append(names[candidates_final2])
+        if len(candidates_final2) > 0:
+            ax1.barh(candidates_final2, thermal.iloc[candidates_final2]*1000, color='green')
+            ax2.barh(candidates_final2, temp.iloc[candidates_final2], color='green')
+            kpi_green[z]= np.round(np.mean(thermal.iloc[candidates_final2][thermal.iloc[candidates_final2] > 0]), 6)
+            t_green[z]= np.round(np.mean(temp.iloc[candidates_final2][temp.iloc[candidates_final2] > 0]), 6)
+            Q_green[z]=np.round(np.mean(cons_esp.iloc[candidates_final2][cons_esp.iloc[candidates_final2] > 0]), 6)
 
 
 
@@ -638,7 +666,10 @@ def detection(year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bloques,
     df_final.columns=['KPI','kpi_lab', 'Temp', 'Temp_lab', 'Cons', 'Cons_lab','Grupos']
     df_final.loc[:, ['KPI', 'Temp', 'Cons']] = df_final.loc[:, ['KPI', 'Temp', 'Cons']].apply(pd.to_numeric, errors='coerce',axis=1)
     df_final.replace(0, np.nan, inplace=True)
+
     bar_line_plot(df_final)
+
+    temporal_plot(dates,var,diff, grupos, list, [imb1, imb2])
 
     print('FINISHED !!')
 
