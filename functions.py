@@ -7,21 +7,37 @@ from sklearn.metrics import silhouette_score
 from sklearn.preprocessing import StandardScaler 
 
 
-def two_scales(df, ax1, var, var_lab, y_lab1,y_lab2):
+def two_scales(df, ax1, var, var_lab, y_lab1,y_lab2,order):
     ax2 = ax1.twinx()
-    sns.barplot(data=df, x='Grupos', y=var, hue=var_lab, alpha=0.5, ax=ax1)
-    ax1.set_xlabel('time (s)')
-    ax1.set_ylabel(y_lab1)
-    sns.lineplot(data=df['Temp'], hue=df['Temp_lab'], marker='o', sort=False, ax=ax2)
-    ax2.set_ylabel(y_lab2)
+    g=sns.barplot(data=df, x='Grupos', y=var, hue=var_lab, palette=['blue', 'red', 'green'],ax=ax1)
+    g.legend_.set_title(None)
+    ax1.set_ylabel(y_lab1, fontsize=23)
+    ax1.set_xlabel('')
+    ax1.tick_params(axis='x', labelsize=21)
+    ax1.tick_params(axis='y', labelsize=22)
+    if order==2:
+        for i, thisbar in enumerate(g.patches):
+            # Set a different hatch for each bar
+            thisbar.set_hatch('\\')
+    ax1.legend(loc='upper left', fontsize=16,fancybox=True, framealpha=0.5)
+    g2 = sns.lineplot(data=df,x='Grupos', y='Temp' , hue='Temp_lab', marker='o', sort=False, ax=ax2, palette=['blue', 'red', 'green'])
+    #g2.legend_.set_title(None)
+    ax2.set_ylabel(y_lab2,fontsize=23)
+    ax2.set_xlabel('')
+    ax2.tick_params(axis='x', labelsize=21)
+    ax2.tick_params(axis='y', labelsize=22)
+    ax2.get_legend().remove()
+    #ax2.legend(loc='upper right', fontsize=17,fancybox=True, framealpha=0.5)
 
 
 def bar_line_plot(df):
-    fig, (ax1,ax2) = plt.subplots(1,2, figsize=(15,8))
+    fig, (ax1,ax2) = plt.subplots(1,2, figsize=(20,9))
 
 
-    two_scales(df, ax1, 'KPI', 'kpi_lab', r'KPI (W/m \N{2} \cdot \N{DEGREE SIGN} C)',r'$\Delta T (\N{DEGREE SIGN} C)$')
-    two_scales(df, ax2, 'Cons', 'Cons_lab', r'Consumption (W/m\N{2}',r'$\Delta T (\N{DEGREE SIGN} C)$')
+    two_scales(df, ax1, 'KPI', 'kpi_lab', r'KPI (W/m $^{2}$ $\cdot$ $^\circ$C)',r'$\Delta$ T ($^\circ$C)',1)
+    two_scales(df, ax2, 'Cons', 'Cons_lab', r'Consumption (W/m$^{2}$)',r'$\Delta$ T ($^\circ$C)',2)
+    plt.tight_layout()
+    plt.show()
     #sns.barplot(data=df, x='Grupos', y='KPI', hue='kpi_lab', alpha=0.5, ax=ax1)
     #ax#2 = ax1.twinx()
     #sns.lineplot(data=df['Temp'], hue=df['Temp_lab'], marker='o', sort=False, ax=ax2)
@@ -483,8 +499,8 @@ def detection(year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bloques,
             ax1.barh(candidates_final, thermal.iloc[candidates_final]*1000, color='red')
             ax2.barh(candidates_final, temp.iloc[candidates_final], color='red')
             kpi_red[z]= np.round(np.mean(thermal.iloc[candidates_final][thermal.iloc[candidates_final] > 0]), 6)
-            Q_red[z]= np.round(np.mean(temp.iloc[candidates_final][temp.iloc[candidates_final] > 0]), 6)
-            t_red[z]=np.round(np.mean(cons_esp.iloc[candidates_final][cons_esp.iloc[candidates_final] > 0]), 6)
+            t_red[z]= np.round(np.mean(temp.iloc[candidates_final][temp.iloc[candidates_final] > 0]), 6)
+            Q_red[z]=np.round(np.mean(cons_esp.iloc[candidates_final][cons_esp.iloc[candidates_final] > 0]), 6)
 
 
 
@@ -543,8 +559,8 @@ def detection(year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bloques,
             ax1.barh(candidates_final, thermal.iloc[candidates_final]*1000, color='green')
             ax2.barh(candidates_final, temp.iloc[candidates_final], color='green')
             kpi_green[z]= np.round(np.mean(thermal.iloc[candidates_final][thermal.iloc[candidates_final] > 0]), 6)
-            Q_green[z]= np.round(np.mean(temp.iloc[candidates_final][temp.iloc[candidates_final] > 0]), 6)
-            t_green[z]=np.round(np.mean(cons_esp.iloc[candidates_final][cons_esp.iloc[candidates_final] > 0]), 6)
+            t_green[z]= np.round(np.mean(temp.iloc[candidates_final][temp.iloc[candidates_final] > 0]), 6)
+            Q_green[z]=np.round(np.mean(cons_esp.iloc[candidates_final][cons_esp.iloc[candidates_final] > 0]), 6)
 
 
 
@@ -608,19 +624,23 @@ def detection(year,var,var_con,diff,o_bool,exterior,rad,bloque, grupos, bloques,
     kpi_final = np.concatenate((kpi_group, kpi_red, kpi_green)).reshape(-1,1)
     temp_final = np.concatenate((t_group, t_red, t_green)).reshape(-1,1)
     Q_final = np.concatenate((Q_group, Q_red, Q_green)).reshape(-1,1)
-    l1=np.concatenate((np.repeat('KPI', grupos), np.repeat('KPI i1', grupos), np.repeat('KPI i2', grupos))).reshape(-1,1)
-    l2=np.concatenate((np.repeat('Cons', grupos), np.repeat('Cons i1', grupos), np.repeat('Cons i2', grupos))).reshape(-1,1)
-    l3=np.concatenate((np.repeat(r'$\Delta T$', grupos), np.repeat(r'$\Delta T$ i1', grupos), np.repeat(r'$\Del]ta T$ i2', grupos))).reshape(-1,1)
+    #l1=np.concatenate((np.repeat('KPI', grupos), np.repeat('KPI i1', grupos), np.repeat('KPI i2', grupos))).reshape(-1,1)
+    l1=np.concatenate((np.repeat('Avg', grupos), np.repeat('i1', grupos), np.repeat('i2', grupos))).reshape(-1,1)
+    l2=np.concatenate((np.repeat('Avg', grupos), np.repeat('i1', grupos), np.repeat('i2', grupos))).reshape(-1,1)
+    l3=np.concatenate((np.repeat(r'$\Delta T$', grupos), np.repeat(r'$\Delta T$ i1', grupos), np.repeat(r'$\Delta T$ i2', grupos))).reshape(-1,1)
     l4=[]
     for t in range(grupos):
         text = 'Group' + str(t+1)
-        l4.append(np.repeat(text,3))
-    l4 = np.concatenate(l4).reshape(-1,1)
-    df_final = pd.DataFrame(np.concatenate((kpi_final, l1, temp_final, l2, Q_final, l3,l4), axis=1))
+        l4.append(text)
+    l4 = np.array(l4)
+    l4 =np.tile(l4,int(len(kpi_final)/grupos)).reshape(-1,1)
+    df_final = pd.DataFrame(np.concatenate((kpi_final*1000, l1, temp_final, l3, Q_final*1000, l2,l4), axis=1))
     df_final.columns=['KPI','kpi_lab', 'Temp', 'Temp_lab', 'Cons', 'Cons_lab','Grupos']
     df_final.loc[:, ['KPI', 'Temp', 'Cons']] = df_final.loc[:, ['KPI', 'Temp', 'Cons']].apply(pd.to_numeric, errors='coerce',axis=1)
-
+    df_final.replace(0, np.nan, inplace=True)
     bar_line_plot(df_final)
+
+    print('FINISHED !!')
 
 
 
