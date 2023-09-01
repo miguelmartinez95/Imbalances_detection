@@ -54,9 +54,12 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances):
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 9))
         kpi, temps = var.iloc[:, lista[t]], diff.iloc[:, lista[t]]
         kpi.index = dates
-        kpi=kpi.resample('12H').sum()
+        ##################################################
+        kpi=kpi.resample('6H').sum()
+        kpi=kpi.iloc[range(6*30)]
         temps.index = dates
-        temps=temps.resample('12H').mean()
+        temps=temps.resample('6H').mean()
+        temps=temps.iloc[range(6*30)]
         x = [datetime.strptime(str(d), "%Y-%m-%d %H:%M:%S").date() for d in dates]
         ax1.plot(kpi, color='grey')
         ax2.plot(temps, color='grey')
