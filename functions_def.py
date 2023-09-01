@@ -55,11 +55,11 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances):
         kpi, temps = var.iloc[:, lista[t]], diff.iloc[:, lista[t]]
         kpi.index = dates
         ##################################################
-        kpi=kpi.resample('6H').sum()
-        kpi=kpi.iloc[range(6*30)]
+        kpi=kpi.resample('3H').sum()
+        kpi=kpi.iloc[range(8*30)]
         temps.index = dates
-        temps=temps.resample('6H').mean()
-        temps=temps.iloc[range(6*30)]
+        temps=temps.resample('3H').mean()
+        temps=temps.iloc[range(8*30)]
         x = [datetime.strptime(str(d), "%Y-%m-%d %H:%M:%S").date() for d in dates]
         ax1.plot(kpi, color='grey')
         ax2.plot(temps, color='grey')
@@ -67,12 +67,12 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances):
         if len(imbalances[t][0]):
             kpi1, temps1 = kpi.iloc[:, imbalances[t][0]], temps.iloc[:, imbalances[t][0]]
             ax1.plot(kpi.index, kpi1, color='red', linewidth=2, label='Imbalance 1')
-            ax2.plot(temps.index, temps1, color='red', linewidth=2, label='Imbalance 1')
+            ax2.plot(temps.index, temps1, color='red', linewidth=2)
 
         if len(imbalances[t][1]):
             kpi2, temps2 = kpi.iloc[:, imbalances[t][1]], temps.iloc[:, imbalances[t][1]]
             ax1.plot(kpi.index, kpi2, color='green', linewidth=2, label='Imbalance 2')
-            ax2.plot(temps.index, temps2, color='green', linewidth=2, label='Imbalance 2')
+            ax2.plot(temps.index, temps2, color='green', linewidth=2)
 
         ax1.set_ylabel(r'KPI (W/m $^{2}$ $\cdot$ $^\circ$C)', fontsize=23)
         ax1.set_xlabel('Time', fontsize=23)
