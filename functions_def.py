@@ -86,6 +86,7 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances):
         ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
         ax2.xaxis.set_major_locator(mdates.DayLocator(interval=15))
         ax2.tick_params('x', labelrotation=45)
+        plt.tight_layout(pad=3)
         plt.show()
 
 
