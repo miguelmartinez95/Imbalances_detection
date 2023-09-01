@@ -68,18 +68,18 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances):
         if len(imbalances[t][0]):
             kpi1, temps1 = kpi.iloc[:, imbalances[t][0]], temps.iloc[:, imbalances[t][0]]
             ax1.plot(kpi.index, kpi1, color='red', linewidth=2, label='Imbalance 1')
-            ax1.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
+            #ax1.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
             ax2.plot(temps.index, temps1, color='red', linewidth=2,label='Imbalance 1')
-            ax2.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
+            #ax2.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
 
 
 
         if len(imbalances[t][1]):
             kpi2, temps2 = kpi.iloc[:, imbalances[t][1]], temps.iloc[:, imbalances[t][1]]
             ax1.plot(kpi.index, kpi2, color='green', linewidth=2, label='Imbalance 2')
-            ax1.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
+            #ax1.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
             ax2.plot(temps.index, temps2, color='green', linewidth=2, label='Imbalance 2')
-            ax2.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
+            #ax2.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
 
         ax1.set_ylabel(r'KPI (W/m $^{2}$ $\cdot$ $^\circ$C)', fontsize=23)
         ax1.set_xlabel('Time', fontsize=23)
@@ -98,7 +98,7 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances):
         ax2.tick_params('y', labelsize=15)
         handles, labels = ax2.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
-        ax1.legend(by_label.values(), by_label.keys())
+        ax2.legend(by_label.values(), by_label.keys())
         plt.tight_layout(pad=3)
         plt.show()
 
