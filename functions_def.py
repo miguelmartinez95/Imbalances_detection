@@ -60,7 +60,7 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances):
         temps.index = dates
         temps=temps.resample('3H').mean()
         temps=temps.iloc[range(8*15),:]
-        x = [datetime.strptime(str(d), "%Y-%m-%d %H:%M:%S").date() for d in dates]
+        #x = [datetime.strptime(str(d), "%Y-%m-%d %H:%M:%S").date() for d in dates]
         ax1.plot(kpi, color='grey')
         ax2.plot(temps, color='grey')
 
