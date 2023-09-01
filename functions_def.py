@@ -366,8 +366,8 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
 
     df_piso = df_piso.drop(df_piso.index[o], axis=0)
     var_con_sum = var_con_sum.drop(var_con_sum.index[o], axis=0)
-    var_clean = var.drop(var.columns[o], axis=1)
-    diff_clean = diff.drop(diff.columns[o], axis=1)
+    #var_clean = var.drop(var.columns[o], axis=1)
+    #diff_clean = diff.drop(diff.columns[o], axis=1)
 
     imb1 = []
     imb2 = []
