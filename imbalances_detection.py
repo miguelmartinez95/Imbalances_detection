@@ -48,10 +48,10 @@ rad = radiation.iloc[:, 4]
 
 #elegimos el edificio concreto
 consumos = consumos.iloc[:, np.where(bloques == edificio)[0]]
-t_out = t_out.iloc[:, np.where(bloques == edificio)[0]]
+#t_out = t_out.iloc[:, np.where(bloques == edificio)[0]]
 nombres = nombres[np.where(bloques == edificio)[0]]
 t_int = t_int.iloc[:, np.where(bloques == edificio)[0]]
-rad = rad.iloc[:, np.where(bloques == edificio)[0]]
+#rad = rad.iloc[:, np.where(bloques == edificio)[0]]
 
 #Metros cuadrados
 m2 = pd.DataFrame(np.tile(np.array([84, 64, 84]), 24))
