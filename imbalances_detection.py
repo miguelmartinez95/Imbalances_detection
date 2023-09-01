@@ -57,4 +57,4 @@ t_int = t_int.iloc[:, np.where(bloques == edificio)[0]]
 m2 = pd.DataFrame(np.tile(np.array([84, 64, 84]), 24))
 #m2 = pd.DataFrame(np.tile(np.array([84, 64, 84]), 18))
 
-decompesation_analisis(path2, consumos, t_int, t_out, rad, m2, grupos, edificio,nombres, letras, portales, pisos, year, dates)
+decompesation_analisis(path2, consumos, t_int, t_out, rad, m2, grupos,nombres, letras, portales, pisos, year, dates)
