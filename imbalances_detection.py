@@ -3,7 +3,7 @@ import urllib.request
 import numpy as np
 import pandas as pd
 
-url1 = 'https://raw.githubusercontent.com/miguelmartinez95/Imbalances_detection/main/decompesation_function_def.py'
+url1 = 'https://raw.githubusercontent.com/miguelmartinez95/Imbalances_detection/main/decompensation_function_def.py'
 url2 = 'https://raw.githubusercontent.com/miguelmartinez95/Imbalances_detection/main/functions_def.py'
 
 filename, headers = urllib.request.urlretrieve(url1, filename=r'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imbalance_detection\decompensation_function_def.py')
