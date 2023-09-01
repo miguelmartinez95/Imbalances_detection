@@ -189,7 +189,7 @@ def decompesation_analisis(path2, consumos, t_int, t_out, rad, m2,grupos, nombre
 
     detection(dates, year, var, var_con, diff, o_bool, t_out, rad, grupos,  nombres, portales, letras, pisos, True, path2)
 
-    print('PISOS SIN DATOS TEMPERATURA:', nombres[o1])
+    print('PISOS SIN DATODS TEMPERATURA:', nombres[o1])
     print('PISOS SIN DATOS DE CONSUMO:', nombres[o2])
     print('PISOS ELIMINADOS POR NO CONSUMOS:', nombres[o])
 
