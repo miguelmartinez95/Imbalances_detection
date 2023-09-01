@@ -49,10 +49,10 @@ def bar_line_plot(df):
     # sns.lineplot(data=df['Temp'], hue=df['Temp_lab'], marker='o', sort=False, ax=ax2)
 
 
-def temporal_plot(dates, var, diff, grupos, list, imbalances):
+def temporal_plot(dates, var, diff, grupos, lista, imbalances):
     for t in range(grupos):
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 9))
-        kpi, temps = var.iloc[:, list[t]], diff.iloc[:, list[t]]
+        kpi, temps = var.iloc[:, lista[t]], diff.iloc[:, lista[t]]
         kpi.index = dates
         temps.index = dates
         x = [datetime.strptime(str(d), "%Y-%m-%d %H:%M:%S").date() for d in dates]
@@ -327,10 +327,10 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
 
     o = np.where(o_bool == True)[0]
     labels_clean = np.delete(kmeans.labels_, o)
-    list = []
+    lista = []
     for t in range(grupos):
         # list.append(np.where(kmeans.labels_ == t)[0])
-        list.append(np.where(labels_clean == t)[0])
+        lista.append(np.where(labels_clean == t)[0])
         a = pd.DataFrame(df_entorno.iloc[np.where(kmeans.labels_ == t)[0], :])
         a1 = a.transpose()
         a1.index = ['Right', 'Up', 'Left', 'Down']
@@ -372,9 +372,9 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
     imb1 = []
     imb2 = []
     for z in range(grupos):
-        thermal = df_piso.iloc[list[z], 0].reset_index(drop=True)
-        cons_esp = var_con_sum.iloc[list[z]].reset_index(drop=True)
-        temp = df_piso.iloc[list[z], 1].reset_index(drop=True)
+        thermal = df_piso.iloc[lista[z], 0].reset_index(drop=True)
+        cons_esp = var_con_sum.iloc[lista[z]].reset_index(drop=True)
+        temp = df_piso.iloc[lista[z], 1].reset_index(drop=True)
         kpi_group[z] = np.round(np.mean(thermal[thermal > 0]), 6)
         Q_group[z] = np.round(np.mean(cons_esp[cons_esp > 0]), 6)
         t_group[z] = np.round(np.mean(temp[temp > 0]), 6)
@@ -382,7 +382,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
         print('Media thermal GRUPO', z, kpi_group[z])
         print('Media consumo_esp GRUPO', z, Q_group[z])
         print('Media temp GRUPO', z, t_group[z])
-        names = nombres[list[z]]
+        names = nombres[lista[z]]
 
         # Percentiles utilizados para las detecciones
         thermal_mean_O = thermal.iloc[thermal.index[thermal > 0]].quantile(0.75)
@@ -543,7 +543,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
     for g in range(grupos):
         print('################# GRUPOS ###############')
         print('GRUPO', g)
-        print(nombres[list[g]])
+        print(nombres[lista[g]])
         print('################# DETECTIONS ###############')
         print('GRUPO', g)
         print('kWh altos y Tº baja:', detection_sup[g])
@@ -573,7 +573,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
 
     bar_line_plot(df_final)
 
-    temporal_plot(dates, var, diff, grupos, list, [imb1, imb2])
+    temporal_plot(dates, var, diff, grupos, lista, [imb1, imb2])
 
     print('FINISHED !!')
 
