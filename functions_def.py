@@ -56,10 +56,10 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances):
         kpi.index = dates
         ##################################################
         kpi=kpi.resample('3H').sum()
-        kpi=kpi.iloc[range(8*15),:]
+        #kpi=kpi.iloc[range(8*15),:]
         temps.index = dates
         temps=temps.resample('3H').mean()
-        temps=temps.iloc[range(8*15),:]
+        #temps=temps.iloc[range(8*15),:]
         #x = [datetime.strptime(str(d), "%Y-%m-%d %H:%M:%S").date() for d in dates]
         ax1.plot(kpi, color='grey')
         ax2.plot(temps, color='grey')
@@ -79,13 +79,15 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances):
         ax1.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
         ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
         ax1.xaxis.set_major_locator(mdates.DayLocator(interval=15))
-        ax1.tick_params('x', labelrotation=45)
+        ax1.tick_params('x', labelsize=22, labelrotation=45)
+        ax1.tick_params('y', labelsize=22)
         ax2.set_ylabel(r'$\Delta$ T ($^\circ$C)', fontsize=23)
         ax2.set_xlabel('Time', fontsize=23)
         ax2.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
         ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
         ax2.xaxis.set_major_locator(mdates.DayLocator(interval=15))
-        ax2.tick_params('x', labelrotation=45)
+        ax2.tick_params('x', labelsize=22, labelrotation=45)
+        ax2.tick_params('y', labelsize=22)
         plt.tight_layout(pad=3)
         plt.show()
 
