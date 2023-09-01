@@ -54,10 +54,12 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances):
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 9))
         kpi, temps = var.iloc[:, lista[t]], diff.iloc[:, lista[t]]
         kpi.index = dates
+        kpi=kpi.resample('3H').mean()
         temps.index = dates
+        temps=temps.resample('3H').mean()
         x = [datetime.strptime(str(d), "%Y-%m-%d %H:%M:%S").date() for d in dates]
-        ax1.plot(x, kpi, color='grey')
-        ax2.plot(x, temps, color='grey')
+        ax1.plot(kpi, color='grey')
+        ax2.plot(temps, color='grey')
 
         if len(imbalances[t][0]):
             kpi1, temps1 = kpi.iloc[:, imbalances[t][0]], temps.iloc[:, imbalances[t][0]]
@@ -366,8 +368,8 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
 
     df_piso = df_piso.drop(df_piso.index[o], axis=0)
     var_con_sum = var_con_sum.drop(var_con_sum.index[o], axis=0)
-    #var_clean = var.drop(var.columns[o], axis=1)
-    #diff_clean = diff.drop(diff.columns[o], axis=1)
+    var_clean = var.drop(var.columns[o], axis=1)
+    diff_clean = diff.drop(diff.columns[o], axis=1)
 
     imb1 = []
     imb2 = []
