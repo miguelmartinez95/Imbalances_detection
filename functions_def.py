@@ -73,6 +73,7 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances):
             ax2.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
 
 
+
         if len(imbalances[t][1]):
             kpi2, temps2 = kpi.iloc[:, imbalances[t][1]], temps.iloc[:, imbalances[t][1]]
             ax1.plot(kpi.index, kpi2, color='green', linewidth=2, label='Imbalance 2')
@@ -84,14 +85,20 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances):
         ax1.set_xlabel('Time', fontsize=23)
         ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
         ax1.xaxis.set_major_locator(mdates.DayLocator(interval=15))
-        ax1.tick_params('x', labelsize=18, labelrotation=45)
-        ax1.tick_params('y', labelsize=18)
+        ax1.tick_params('x', labelsize=15, labelrotation=45)
+        ax1.tick_params('y', labelsize=15)
+        handles, labels = ax1.get_legend_handles_labels()
+        by_label = dict(zip(labels, handles))
+        ax1.legend(by_label.values(), by_label.keys())
         ax2.set_ylabel(r'$\Delta$ T ($^\circ$C)', fontsize=23)
         ax2.set_xlabel('Time', fontsize=23)
         ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
         ax2.xaxis.set_major_locator(mdates.DayLocator(interval=15))
-        ax2.tick_params('x', labelsize=18, labelrotation=45)
-        ax2.tick_params('y', labelsize=18)
+        ax2.tick_params('x', labelsize=15, labelrotation=45)
+        ax2.tick_params('y', labelsize=15)
+        handles, labels = ax2.get_legend_handles_labels()
+        by_label = dict(zip(labels, handles))
+        ax1.legend(by_label.values(), by_label.keys())
         plt.tight_layout(pad=3)
         plt.show()
 
