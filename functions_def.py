@@ -413,7 +413,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
         # Percentiles utilizados para las detecciones
         thermal_mean_O = thermal.iloc[thermal.index[thermal > 0]].quantile(0.75)
         # thermal_mean2_O = thermal.iloc[thermal.index[thermal > 0]].quantile(0.9)
-        temp_mean_O = temp.iloc[temp.index[temp > 0]].quantile(0.5)
+        temp_mean_O = temp.iloc[thermal.index[thermal > 0]].quantile(0.5)
         # temp_mean2_O = temp.iloc[temp.index[temp > 0]].quantile(0.75)
 
         # Graficos de barras para analizar los pisos detectados (KPI - Salto termico)
@@ -440,21 +440,21 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
         # Tambien detectamos los pisos muy lejanos a la mediana de pisos con consumos positivos (por arriba) a la vez que no esten en el 25% con mayor salto termico
         d1 = np.where(thermal - thermal.iloc[thermal.index[thermal > 0]].quantile(0.5) > 0.003)[0]
         if len(d1) > 0:
-            t1 = np.where(temp[d1] < temp.iloc[temp.index[temp > 0]].quantile(0.75))[0]
+            t1 = np.where(temp[d1] < temp.iloc[thermal.index[thermal > 0]].quantile(0.75))[0]
             if len(t1 > 0):
                 candidates0 = d1[t1]
 
         candidates = np.where(thermal > thermal_mean_O)[0]
         candidates2 = np.where(temp < temp_mean_O)[0]
         candidates_final1 = np.intersect1d(candidates, candidates2)
-        imb1.append(candidates_final1)
+
 
         try:
             candidates_final1 = np.union1d(candidates_final1, candidates0)
             del candidates0
         except:
             pass
-
+        imb1.append(candidates_final1)
         # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 1: KPI, Salto térmico y consumo especifíco
         detection_sup.append(names[candidates_final1])
         if len(candidates_final1) > 0:
@@ -491,28 +491,28 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
         # Otros Percentiles utilizados para las detecciones
         thermal_mean = thermal.iloc[thermal.index[thermal > 0]].quantile(0.25)
         # thermal_mean2 = thermal.iloc[thermal.index[thermal > 0]].quantile(0.1)
-        temp_mean = temp.iloc[temp.index[temp > 0]].quantile(0.5)
+        temp_mean = temp.iloc[thermal.index[thermal > 0]].quantile(0.5)
         # temp_mean2 = temp.iloc[temp.index[temp > 0]].quantile(0.25)
         #
 
         # Tambien detectamos los pisos muy lejanos a la mediana de pisos con consumos positivos (por abajo) a la vez que no esten en el 25% con menor salto termico
         d1 = np.where(thermal - thermal.iloc[thermal.index[thermal > 0]].quantile(0.5) < -0.003)[0]
         if len(d1) > 0:
-            t1 = np.where(temp[d1] > temp.iloc[temp.index[temp > 0]].quantile(0.25))[0]
+            t1 = np.where(temp[d1] > temp.iloc[thermal.index[thermal > 0]].quantile(0.25))[0]
             if len(t1 > 0):
                 candidates0 = d1[t1]
 
         candidates = np.where(thermal < thermal_mean)[0]
         candidates2 = np.where(temp > temp_mean)[0]
         candidates_final2 = np.intersect1d(candidates, candidates2)
-        imb2.append(candidates_final2)
+
 
         try:
             candidates_final2 = np.union1d(candidates_final2, candidates0)
             del candidates0
         except:
             pass
-
+        imb2.append(candidates_final2)
         # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 3: KPI, Salto térmico y consumo especifíco
         detection_inf.append(names[candidates_final2])
         if len(candidates_final2) > 0:
