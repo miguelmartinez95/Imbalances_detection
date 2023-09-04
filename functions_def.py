@@ -49,7 +49,7 @@ def bar_line_plot(df):
     # sns.lineplot(data=df['Temp'], hue=df['Temp_lab'], marker='o', sort=False, ax=ax2)
 
 
-def temporal_plot(dates, var, diff, grupos, lista, imbalances):
+def temporal_plot(dates, var, diff, grupos, lista, imbalances,save_results,path,year):
     for t in range(grupos):
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 9))
         kpi, temps = var.iloc[:, lista[t]], diff.iloc[:, lista[t]]
@@ -108,6 +108,12 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances):
         ax2.legend(by_label.values(), by_label.keys(), fontsize=18)
         plt.tight_layout(pad=3)
         plt.show()
+        if save_results == True:
+            sep = '\\'
+            pp = sep.join([path, year])
+            print(pp + '\\' + 'g' + str(t) + 'temporal' + '.png')
+            plt.savefig(pp + '\\' + 'g' + str(t) + 'temporal' + '.png')
+            plt.close()
 
 
 def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, nombres,portales,letras,pisos, save_results,
@@ -386,6 +392,8 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
             sep = '\\'
             pp = sep.join([path, year])
             plt.savefig(pp + '\\' + 'g' + str(t) + '.png')
+            plt.close()
+
 
     detection_sup = []
     detection_inf = []
@@ -575,6 +583,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
             pp = sep.join([path, year])
             print(pp + '\\' + 'g' + str(z) + 'detec' + '.png')
             plt.savefig(pp + '\\' + 'g' + str(z) + 'detec' + '.png')
+            plt.close()
 
     # Printeamos los pisos que forman cada grupos además de los pisos detectados en las posibles descompesaciones
     for g in range(grupos):
@@ -610,7 +619,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
 
     bar_line_plot(df_final)
 
-    temporal_plot(dates, var, diff, grupos, lista, [imb1, imb2])
+    temporal_plot(dates, var, diff, grupos, lista, [imb1, imb2],save_results, path, year)
 
     print('FINISHED !!')
 
