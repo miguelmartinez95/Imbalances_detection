@@ -356,16 +356,18 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
     labels_clean = np.delete(kmeans.labels_, o)
     lista = []
     for t in range(grupos):
-        lista.append(np.where(kmeans.labels_ == t)[0])
-        #lista.append(np.where(labels_clean == t)[0])
-        a = pd.DataFrame(df_entorno.iloc[np.where(kmeans.labels_ == t)[0], :])
+        #lista.append(np.where(kmeans.labels_ == t)[0])
+        lista.append(np.where(labels_clean == t)[0])
+        #a = pd.DataFrame(df_entorno.iloc[np.where(kmeans.labels_ == t)[0], :])
+        a = pd.DataFrame(df_entorno.iloc[np.where(labels_clean == t)[0], :])
         a1 = a.transpose()
         a1.index = ['Right', 'Up', 'Left', 'Down']
         a1.plot(figsize=(10, 5), kind='bar', color='blue', width=0.2, legend=False, edgecolor='black', fontsize=22,
                 rot=0)
         plt.ylim(-3, 25)
         plt.ylabel(r'$\Delta$T [$^\circ$C]', fontsize=22)
-        az = pd.DataFrame(df_entorno.iloc[np.where(kmeans.labels_ == t)[0], :])
+        #az = pd.DataFrame(df_entorno.iloc[np.where(kmeans.labels_ == t)[0], :])
+        az = pd.DataFrame(df_entorno.iloc[np.where(labels_clean == t)[0], :])
         a = az[az >= 0].mean(axis=0, skipna=True)
         a.index = ['Right', 'Up', 'Left', 'Down']
         print('GRUPO', t, 'tiene de medias', a)
