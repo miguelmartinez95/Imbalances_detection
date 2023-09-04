@@ -63,7 +63,7 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances):
         ##################################################
 
         kpi_new=kpi_new.resample('3H').sum()
-        kpi_new = kpi_new.where(kpi_new >100, np.nan)
+        kpi_new = kpi_new.where(kpi_new <100, np.nan)
         #kpi=kpi.iloc[range(8*15),:]
         temps.index = dates
         temps=temps.resample('3H').mean()
