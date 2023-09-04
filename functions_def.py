@@ -420,7 +420,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
 
         # Limite para las descompensaciones TIPO 1 y 3
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
-        ax1.barh(np.arange(len(thermal)), thermal * 1000, color='black')
+        ax1.barh(thermal.index, thermal * 1000, color='black')
 
         ax1.set_xlim(0, 10)
         ax1.tick_params(axis='x', labelsize=18)
@@ -429,7 +429,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
         ax1.set_xlabel('KPI [W/(m$^2 \cdot ^\circ$C)]', fontsize=20)
         ax1.set_ylabel('Dwellings', fontsize=20)
 
-        ax2.barh(np.arange(len(temp)), temp, color='black')
+        ax2.barh(temp.index, temp, color='black')
         ax2.set_xlim(0, 15)
         ax2.tick_params(axis='x', labelsize=18)
         ax2.tick_params(axis='y', labelsize=18)
@@ -458,8 +458,8 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
         # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 1: KPI, Salto térmico y consumo especifíco
         detection_sup.append(names[candidates_final1])
         if len(candidates_final1) > 0:
-            ax1.barh(candidates_final1, thermal.iloc[candidates_final1] * 1000, color='red')
-            ax2.barh(candidates_final1, temp.iloc[candidates_final1], color='red')
+            ax1.barh(thermal.index[candidates_final1], thermal.iloc[candidates_final1] * 1000, color='red')
+            ax2.barh(temp.index[candidates_final1], temp.iloc[candidates_final1], color='red')
             kpi_red[z] = np.round(np.mean(thermal.iloc[candidates_final1][thermal.iloc[candidates_final1] > 0]), 6)
             t_red[z] = np.round(np.mean(temp.iloc[candidates_final1][temp.iloc[candidates_final1] > 0]), 6)
             Q_red[z] = np.round(np.mean(cons_esp.iloc[candidates_final1][cons_esp.iloc[candidates_final1] > 0]), 6)
@@ -517,8 +517,8 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
         detection_inf.append(names[candidates_final2])
         print('imba', imb2)
         if len(candidates_final2) > 0:
-            ax1.barh(candidates_final2, thermal.iloc[candidates_final2] * 1000, color='green')
-            ax2.barh(candidates_final2, temp.iloc[candidates_final2], color='green')
+            ax1.barh(thermal.index[candidates_final2], thermal.iloc[candidates_final2] * 1000, color='green')
+            ax2.barh(temp.index[candidates_final2], temp.iloc[candidates_final2], color='green')
             kpi_green[z] = np.round(np.mean(thermal.iloc[candidates_final2][thermal.iloc[candidates_final2] > 0]), 6)
             t_green[z] = np.round(np.mean(temp.iloc[candidates_final2][temp.iloc[candidates_final2] > 0]), 6)
             Q_green[z] = np.round(np.mean(cons_esp.iloc[candidates_final2][cons_esp.iloc[candidates_final2] > 0]), 6)
