@@ -36,11 +36,10 @@ def decompesation_analisis(path2, consumos, t_int, t_out, rad, m2,grupos, nombre
     letras = np.tile(['A','B','C'], int(72/3))
     bes = test.iloc[np.where(letras=='B')[0]]
     otros = test.drop(np.where(letras=='B')[0])
-    print('Media B', np.mean(bes))
     print('Media AC', np.mean(otros))
+    print('Media B', np.mean(bes))
     print('Mediana B', np.median(bes))
     print('Mediana AC', np.median(otros))
-
     ####################################################
 
     # Detecciones de pisos con datos malos o extraños -- solucionamos cogiendo la media de sus entornos!!
