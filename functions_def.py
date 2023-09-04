@@ -302,6 +302,13 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
     var_con_sum = var_con_sum.drop(var_con_sum.index[ar], axis=0)
     nombres = np.delete(nombres, ar, 0)
     ##################################################################################################
+    o = np.where(o_bool == True)[0]
+    matrix = np.delete(matrix, o, 0)
+    var = var.drop(var.columns[o], axis=1)
+    diff = diff.drop(diff.columns[o], axis=1)
+    var_con_sum = var_con_sum.drop(var_con_sum.index[o], axis=0)
+    nombres = np.delete(nombres, o, 0)
+    ##################################################################################################
     piso = matrix[:, np.array([0, 1])]
     entorno = matrix[:, np.array([3, 5, 7, 9])]
 
@@ -352,22 +359,22 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
     # Agrupamiento con datos escalados
     kmeans.fit(scaled_features)
 
-    o = np.where(o_bool == True)[0]
-    labels_clean = np.delete(kmeans.labels_, o)
+
+    #labels_clean = np.delete(kmeans.labels_, o)
     lista = []
     for t in range(grupos):
-        #lista.append(np.where(kmeans.labels_ == t)[0])
-        lista.append(np.where(labels_clean == t)[0])
-        #a = pd.DataFrame(df_entorno.iloc[np.where(kmeans.labels_ == t)[0], :])
-        a = pd.DataFrame(df_entorno.iloc[np.where(labels_clean == t)[0], :])
+        lista.append(np.where(kmeans.labels_ == t)[0])
+        #lista.append(np.where(labels_clean == t)[0])
+        a = pd.DataFrame(df_entorno.iloc[np.where(kmeans.labels_ == t)[0], :])
+        #a = pd.DataFrame(df_entorno.iloc[np.where(labels_clean == t)[0], :])
         a1 = a.transpose()
         a1.index = ['Right', 'Up', 'Left', 'Down']
         a1.plot(figsize=(10, 5), kind='bar', color='blue', width=0.2, legend=False, edgecolor='black', fontsize=22,
                 rot=0)
         plt.ylim(-3, 25)
         plt.ylabel(r'$\Delta$T [$^\circ$C]', fontsize=22)
-        #az = pd.DataFrame(df_entorno.iloc[np.where(kmeans.labels_ == t)[0], :])
-        az = pd.DataFrame(df_entorno.iloc[np.where(labels_clean == t)[0], :])
+        az = pd.DataFrame(df_entorno.iloc[np.where(kmeans.labels_ == t)[0], :])
+        #az = pd.DataFrame(df_entorno.iloc[np.where(labels_clean == t)[0], :])
         a = az[az >= 0].mean(axis=0, skipna=True)
         a.index = ['Right', 'Up', 'Left', 'Down']
         print('GRUPO', t, 'tiene de medias', a)
@@ -393,8 +400,8 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
     t_red = [0 for x in range(grupos)]
     t_green = [0 for x in range(grupos)]
 
-    df_piso = df_piso.drop(df_piso.index[o], axis=0)
-    var_con_sum = var_con_sum.drop(var_con_sum.index[o], axis=0)
+    #df_piso = df_piso.drop(df_piso.index[o], axis=0)
+    #var_con_sum = var_con_sum.drop(var_con_sum.index[o], axis=0)
     var_clean = var.drop(var.columns[o], axis=1)
     diff_clean = diff.drop(diff.columns[o], axis=1)
 
