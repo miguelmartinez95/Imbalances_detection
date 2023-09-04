@@ -55,6 +55,12 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances):
         kpi, temps = var.iloc[:, lista[t]], diff.iloc[:, lista[t]]
         kpi.index = dates
         ##################################################
+        st = dates[0]
+        end = dates[len(dates)-1]
+        new = pd.date_range(st, end, freq='H')
+        kpi_new = kpi.reindex(new)
+
+        ##################################################
 
         kpi=kpi.resample('3H').sum()
         #kpi=kpi.iloc[range(8*15),:]
