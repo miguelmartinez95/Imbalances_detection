@@ -34,8 +34,8 @@ def decompesation_analisis(path2, consumos, t_int, t_out, rad, m2,grupos, nombre
     #Comprobacion consumos entre AC y B
     test = consumos.sum(axis=0)/horas
     letras = np.tile(['A','B','C'], int(72/3))
-    bes = test.iloc[np.where(letras=='C')[0]]
-    otros = test.drop(np.where(letras=='C')[0])
+    bes = test.iloc[np.where(letras=='B')[0]]
+    otros = test.drop(np.where(letras=='B')[0])
     print('Media B', np.mean(bes))
     print('Media AC', np.mean(otros))
     print('Mediana B', np.median(bes))
