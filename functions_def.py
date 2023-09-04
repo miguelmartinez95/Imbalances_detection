@@ -150,7 +150,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
         te = ext_split[i]
 
         ind = np.where(r > 200)[0]
-        ind2 = np.where(te > 15)[0]
+        ind2 = np.where(te > 14)[0]
 
         indt = np.union1d(ind, ind2)
         if len(indt) > 0:
@@ -168,6 +168,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
     ###########################################################################
     # Calculo de valores concretos para cada piso y para cada variable
     horas = pd.DataFrame(var_con > 0).sum(axis=0)
+    diff=diff.where(diff>2, np.nan)
     diff_mean = diff.mean(axis=0, skipna=True)
     var_sum = var.sum(axis=0) / np.array(horas)
     var_con_sum = var_con.sum(axis=0) / np.array(horas)
