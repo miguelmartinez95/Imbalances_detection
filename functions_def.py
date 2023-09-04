@@ -356,7 +356,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
     labels_clean = np.delete(kmeans.labels_, o)
     lista = []
     for t in range(grupos):
-        list.append(np.where(kmeans.labels_ == t)[0])
+        lista.append(np.where(kmeans.labels_ == t)[0])
         #lista.append(np.where(labels_clean == t)[0])
         a = pd.DataFrame(df_entorno.iloc[np.where(kmeans.labels_ == t)[0], :])
         a1 = a.transpose()
