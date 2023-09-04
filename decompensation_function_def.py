@@ -172,7 +172,7 @@ def decompesation_analisis(path2, consumos, t_int, t_out, rad, m2,grupos, nombre
         diff.iloc[np.where(consumos.iloc[:, w].isna())[0], w] = np.nan
 
     # Enmascaramientos de valores de salto térmico muy pequeñitos
-    diffT = diff.mask(abs(diff) < 1, 1)
+    diffT = diff.mask(abs(diff) < 2, 1)
 
     # CALCULO KPI (y consumo específico)
     for i in range(var.shape[0]):
