@@ -59,10 +59,11 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances):
         end = dates[len(dates)-1]
         new = pd.date_range(st, end, freq='H')
         kpi_new = kpi.reindex(new)
-
+        kpi_new = kpi_new.replace(np.nan, 99999)
         ##################################################
 
         kpi_new=kpi_new.resample('3H').sum()
+        kpi_new = kpi_new.where(kpi_new >100, np.nan)
         #kpi=kpi.iloc[range(8*15),:]
         temps.index = dates
         temps=temps.resample('3H').mean()
