@@ -21,11 +21,11 @@ path=r'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Data'
 path2 = r'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Graficos'
 
 #Años 2019 y 2020 con horas en 00:07:00, el resto con 00:00:00
-start='2019-12-01 00:07:00'
-end='2020-03-28 23:07:00'
+start='2020-12-01 00:07:00'
+end='2021-03-28 23:00:00'
 grupos = 5
 edificio = 'Derechos'
-agregado=True
+agregado=False
 letras=3
 portales=3
 pisos=8
