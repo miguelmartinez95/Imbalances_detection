@@ -48,8 +48,6 @@ def bar_line_plot(df):
     i2=i2.sort_values('KPI')
     df = pd.concat([avg, i1, i2], axis=0)
 
-
-
     two_scales(df, ax1, 'KPI', 'kpi_lab', r'KPI (W/m $^{2}$ $\cdot$ $^\circ$C)', r'$\Delta$ T ($^\circ$C)', 1)
     two_scales(df, ax2, 'Cons', 'Cons_lab', r'Consumption (W/m$^{2}$)', r'$\Delta$ T ($^\circ$C)', 2)
     plt.tight_layout(pad=3)
