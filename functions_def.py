@@ -113,7 +113,7 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances,save_results,path,
         ax2.set_ylim([-1, 250])
         handles, labels = ax1.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
-        ax1.legend(by_label.values(), by_label.keys(),fontsize=18)
+        ax1.legend(by_label.values(), by_label.keys(),fontsize=17)
         ax2.set_ylabel(r'$\Delta$ T ($^\circ$C)', fontsize=23)
         ax2.set_xlabel('Time', fontsize=20, labelpad=8)
         ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
@@ -123,7 +123,7 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances,save_results,path,
         ax2.set_ylim([2, 26])
         handles, labels = ax2.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
-        ax2.legend(by_label.values(), by_label.keys(), fontsize=18)
+        ax2.legend(by_label.values(), by_label.keys(), fontsize=17)
         plt.tight_layout(pad=4)
 
         if save_results == True:
