@@ -39,7 +39,7 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
     # ax2.legend(loc='upper right', fontsize=17,fancybox=True, framealpha=0.5)
 
 
-def bar_line_plot(df):
+def bar_line_plot(df,save_results,path,year):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 9))
 
     #i1 = df.iloc[np.where(df.loc[:,'kpi_lab']=='i1')[0],:].reset_index(drop=True)
@@ -53,6 +53,12 @@ def bar_line_plot(df):
     two_scales(df, ax1, 'KPI', 'kpi_lab', r'KPI (W/m $^{2}$ $\cdot$ $^\circ$C)', r'$\Delta$ T ($^\circ$C)', 1)
     two_scales(df, ax2, 'Cons', 'Cons_lab', r'Consumption (W/m$^{2}$)', r'$\Delta$ T ($^\circ$C)', 2)
     plt.tight_layout(pad=3)
+
+    if save_results == True:
+        sep = '\\'
+        pp = sep.join([path, year])
+        plt.savefig(pp + '\\' + 'g' + 'comparison' + '.png')
+        plt.close()
     #plt.show()
     # sns.barplot(data=df, x='Grupos', y='KPI', hue='kpi_lab', alpha=0.5, ax=ax1)
     # ax#2 = ax1.twinx()
@@ -79,12 +85,12 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances,save_results,path,
         temps=temps.resample('3H').mean()
         #temps=temps.iloc[range(8*15),:]
         #x = [datetime.strptime(str(d), "%Y-%m-%d %H:%M:%S").date() for d in dates]
-        ax1.plot(kpi_new, color='grey')
+        ax1.plot(kpi_new*1000, color='grey')
         ax2.plot(temps, color='grey')
 
         if len(imbalances[0][t]):
             kpi1, temps1 = kpi_new.iloc[:, imbalances[0][t]], temps.iloc[:, imbalances[0][t]]
-            ax1.plot(kpi_new.index, kpi1, color='red', linewidth=2, label='Imbalance 1')
+            ax1.plot(kpi_new.index, kpi1*1000, color='red', linewidth=2, label='Imbalance 1')
             #ax1.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
             ax2.plot(temps.index, temps1, color='red', linewidth=2,label='Imbalance 1')
             #ax2.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
@@ -93,7 +99,7 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances,save_results,path,
 
         if len(imbalances[1][t]):
             kpi2, temps2 = kpi_new.iloc[:, imbalances[1][t]], temps.iloc[:, imbalances[1][t]]
-            ax1.plot(kpi_new.index, kpi2, color='green', linewidth=2, label='Imbalance 2')
+            ax1.plot(kpi_new.index, kpi2*1000, color='green', linewidth=2, label='Imbalance 2')
             #ax1.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
             ax2.plot(temps.index, temps2, color='green', linewidth=2, label='Imbalance 2')
             #ax2.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
@@ -113,6 +119,7 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances,save_results,path,
         ax2.xaxis.set_major_locator(mdates.DayLocator(interval=15))
         ax2.tick_params('x', labelsize=15, labelrotation=45)
         ax2.tick_params('y', labelsize=15)
+        ax2.set_ylim([3, 21])
         handles, labels = ax2.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
         ax2.legend(by_label.values(), by_label.keys(), fontsize=18)
@@ -121,7 +128,6 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances,save_results,path,
         if save_results == True:
             sep = '\\'
             pp = sep.join([path, year])
-            print(pp + '\\' + 'g' + str(t) + 'temporal' + '.png')
             plt.savefig(pp + '\\' + 'g' + str(t) + 'temporal' + '.png')
             plt.close()
 
@@ -627,9 +633,9 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
                                                                                               errors='coerce', axis=1)
     df_final.replace(0, np.nan, inplace=True)
 
-    bar_line_plot(df_final)
+    bar_line_plot(df_final,save_results,path,year)
 
-    temporal_plot(dates, var, diff, grupos, lista, [imb1, imb2],save_results, path, year)
+    temporal_plot(dates, var_con, diff, grupos, lista, [imb1, imb2],save_results, path, year)
 
     print('FINISHED !!')
 
