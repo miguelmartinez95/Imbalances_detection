@@ -106,7 +106,7 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances,save_results,path,
         handles, labels = ax2.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
         ax2.legend(by_label.values(), by_label.keys(), fontsize=18)
-        plt.tight_layout(pad=3)
+        plt.tight_layout(pad=4)
 
         if save_results == True:
             sep = '\\'
