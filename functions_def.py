@@ -40,13 +40,13 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
 def bar_line_plot(df):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 9))
 
-    i1 = df.iloc[np.where(df.loc[:,'kpi_lab']=='i1')[0],:].reset_index(drop=True)
-    i1=i1.sort_values('KPI')
-    avg = df.iloc[np.where(df.loc[:,'kpi_lab']=='Avg')[0], :].reset_index(drop=True)
-    avg = avg.reindex(i1.index)
-    i2 = df.iloc[np.where(df.loc[:,'kpi_lab']=='i2')[0],:].reset_index(drop=True)
-    i2=i2.reindex(i1.index)
-    df = pd.concat([avg, i1, i2], axis=0)
+    #i1 = df.iloc[np.where(df.loc[:,'kpi_lab']=='i1')[0],:].reset_index(drop=True)
+    #i1=i1.sort_values('KPI')
+    #avg = df.iloc[np.where(df.loc[:,'kpi_lab']=='Avg')[0], :].reset_index(drop=True)
+    #a#g = avg.reindex(i1.index)
+    #i2 = df.iloc[np.where(df.loc[:,'kpi_lab']=='i2')[0],:].reset_index(drop=True)
+    #i2=i2.reindex(i1.index)
+    #df = pd.concat([avg, i1, i2], axis=0)
 
     two_scales(df, ax1, 'KPI', 'kpi_lab', r'KPI (W/m $^{2}$ $\cdot$ $^\circ$C)', r'$\Delta$ T ($^\circ$C)', 1)
     two_scales(df, ax2, 'Cons', 'Cons_lab', r'Consumption (W/m$^{2}$)', r'$\Delta$ T ($^\circ$C)', 2)
