@@ -25,7 +25,9 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
     else:
         ax1.set_ylim([0, 12])
     ax1.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
-    g2 = sns.lineplot(data=df, x='Grupos', y='Temp', hue='Temp_lab', marker='o', sort=False, ax=ax2,
+    #g2 = sns.lineplot(data=df, x='Grupos', y='Temp', hue='Temp_lab', marker='o', sort=False, ax=ax2,
+    #                  palette=['blue', 'red', 'green'])
+    g2 = sns.pointplot(data=df, x='Grupos', y='Temp', hue='Temp_lab', marker='o', sort=False, ax=ax2,
                       palette=['blue', 'red', 'green'])
     # g2.legend_.set_title(None)
     ax2.set_ylabel(y_lab2, fontsize=23)
