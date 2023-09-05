@@ -40,10 +40,21 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
 def bar_line_plot(df):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 9))
 
+    avg = df.iloc[np.where(df.loc['Temp_lab']=='Avg')[0]]
+    avg = avg.sort_values('KPI')
+    i1 = df.iloc[np.where(df.loc['Temp_lab']=='i1')[0]]
+    i1=i1.sort_values('KPI')
+    i2 = df.iloc[np.where(df.loc['Temp_lab']=='i2')[0]]
+    i2=i2.sort_values('KPI')
+
+    df = pd.concat([avg, i1, i2], axis=0)
+
+
+
     two_scales(df, ax1, 'KPI', 'kpi_lab', r'KPI (W/m $^{2}$ $\cdot$ $^\circ$C)', r'$\Delta$ T ($^\circ$C)', 1)
     two_scales(df, ax2, 'Cons', 'Cons_lab', r'Consumption (W/m$^{2}$)', r'$\Delta$ T ($^\circ$C)', 2)
     plt.tight_layout(pad=3)
-    #plt.show()
+    plt.show()
     # sns.barplot(data=df, x='Grupos', y='KPI', hue='kpi_lab', alpha=0.5, ax=ax1)
     # ax#2 = ax1.twinx()
     # sns.lineplot(data=df['Temp'], hue=df['Temp_lab'], marker='o', sort=False, ax=ax2)
