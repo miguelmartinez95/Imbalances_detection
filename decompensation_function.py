@@ -184,8 +184,8 @@ def decompesation_analisis(path2, consumos, t_int, t_out, rad, m2, min_horas, gr
     o = np.where(horas.reset_index(drop=True) < min_horas)[0]
     o_bool = np.array(horas.reset_index(drop=True) < min_horas)
 
-    # Sustituyo los pisos con 0 horas (< 5 ) para no reventar la division
-    horas[o] = np.repeat(1, len(np.where(horas.reset_index(drop=True) < 1)[0]))
+    # Sustituyo los pisos con 0 horas para no reventar la division
+    horas[np.where(horas.reset_index(drop=True) < 1)[0]] = np.repeat(1, len(np.where(horas.reset_index(drop=True) < 1)[0]))
 
     # Forzamos a tener saltos térmicos vacíos si no hay datos de consumos
     for w in range(consumos.shape[1]):
