@@ -5,8 +5,6 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 import matplotlib.dates as mdates
-from datetime import datetime
-
 
 def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
     '''
