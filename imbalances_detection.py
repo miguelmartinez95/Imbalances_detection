@@ -24,6 +24,7 @@ path2 = r'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Gra
 #Años 2019 y 2020 con horas en 00:07:00, el resto con 00:00:00
 start='2019-12-01 00:07:00'
 end='2020-03-28 23:07:00'
+min_horas = 5 #horas mínima de consumos para considerarlos
 grupos = 5
 edificio = 'Derechos'
 agregado=False
@@ -56,4 +57,4 @@ t_int = t_int.iloc[:, np.where(bloques == edificio)[0]]
 m2 = pd.DataFrame(np.tile(np.array([84, 64, 84]), 24)) #Derechos
 #m2 = pd.DataFrame(np.tile(np.array([84, 64, 84]), 18)) #Villabuena
 
-decompesation_analisis(path2, consumos, t_int, t_out, rad, m2, grupos,nombres, letras, portales, pisos, year, dates)
+decompesation_analisis(path2, consumos, t_int, t_out, rad, m2, min_horas, grupos,nombres, letras, portales, pisos, year, dates)

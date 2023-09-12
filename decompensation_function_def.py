@@ -1,19 +1,24 @@
 import pandas as pd
 import numpy as np
-from functions_def import data_structure, detection
-import sys
+from functions_def import  detection
 
-
-# Ejemplo de path
-# sys.path.insert(1, 'E:\Documents\Doctorado\Codigos_CUVI\Descompensaciones_Victoria\Scripts')
-
-def decompesation_analisis(path2, consumos, t_int, t_out, rad, m2,grupos, nombres, letras, portales, pisos, year, dates):
+def decompesation_analisis(path2, consumos, t_int, t_out, rad, m2, min_horas, grupos, nombres, letras, portales, pisos, year, dates):
     '''
-    :param path: ruta
-    :param start: fecha inicio periodo a analizar
-    :param end: fecha final periodo a analizar
+    :param path2: ruta
+    :param consumo:datos de consumos de calefacción
+    :param t_int: datos de temperaturas interiores
+    :param t_out: datos de temperaturas exteriores
+    :param rad: datos de irradiancia
+    :param m2: vector con los m2 de cada piso
+    :param min_horas: horas mínimas de calefacción en el periodo para ser considerado
     :param grupos: numero de grupos para cluster; si va vacío si hará un análisi para ver el número óptimo
-    :param edificio: if they are considered several buildings ej:Derechos o Villabuena
+    :param nombres: labels para cada todos los pisos
+    :param letras: cuantas letras hay por portal
+    :param portales: cuantos portales tiene el edificio
+    :paramn pisos: cuantos pisos tiene el edifcio
+    :param year: año en que comineza el análisis o "agregado"
+    :param dates: fechas
+
     :return: We define the building data based on its architecture
     '''
 
@@ -32,6 +37,7 @@ def decompesation_analisis(path2, consumos, t_int, t_out, rad, m2,grupos, nombre
     horas = pd.DataFrame(consumos > 0).sum(axis=0)  # calculamos las horas de consumos por piso
     #################################################
     #Comprobacion consumos entre AC y B
+    #################################################
 
     #test = consumos.sum(axis=0)/horas
     #letras = np.tile(['A','B','C'], int(72/3))
@@ -53,6 +59,7 @@ def decompesation_analisis(path2, consumos, t_int, t_out, rad, m2,grupos, nombre
         0]  # valores NaNs más que el 75% de los datos considerados
 
     if len(o1) > 0:
+        #Calculo del número de pisos que forman ciertos entornos
         # Medio arriba
         g, g2 = 0, 0
         ar = list()
@@ -173,12 +180,12 @@ def decompesation_analisis(path2, consumos, t_int, t_out, rad, m2,grupos, nombre
     var = np.zeros((consumos.shape[0], consumos.shape[1]))
     var_con = np.zeros((consumos.shape[0], consumos.shape[1]))
 
-    # Detectamos pisos que tienen menos de 5 horas de consumos para luego no tenerlos en cuenta en la última detección
-    o = np.where(horas.reset_index(drop=True) < 5)[0]
-    o_bool = np.array(horas.reset_index(drop=True) < 5)
+    # Detectamos pisos que tienen menos de x horas de consumos para luego no tenerlos en cuenta en la última detección
+    o = np.where(horas.reset_index(drop=True) < min_horas)[0]
+    o_bool = np.array(horas.reset_index(drop=True) < min_horas)
 
     # Sustituyo los pisos con 0 horas (< 5 ) para no reventar la division
-    horas[o] = np.repeat(1, len(np.where(horas.reset_index(drop=True) < 5)[0]))
+    horas[o] = np.repeat(1, len(np.where(horas.reset_index(drop=True) < 1)[0]))
 
     # Forzamos a tener saltos térmicos vacíos si no hay datos de consumos
     for w in range(consumos.shape[1]):
@@ -187,7 +194,7 @@ def decompesation_analisis(path2, consumos, t_int, t_out, rad, m2,grupos, nombre
     # Enmascaramientos de valores de salto térmico muy pequeñitos
     diffT = diff.mask(abs(diff) < 2, 1)
 
-    # CALCULO KPI (y consumo específico)
+    # CALCULO KPI (var) y consumo específico (var_con)
     for i in range(var.shape[0]):
         p = np.where(np.array(diffT)[i] < 0)[0]  # vemos si hat salto termicos negativos
         if len(p) > 0:
