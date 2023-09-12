@@ -9,6 +9,19 @@ from datetime import datetime
 
 
 def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
+    '''
+
+    :param df: dataframe  con los datos
+    :param ax1: eje para realizar un gráfico con matplotlib
+    :param var: label for plotted variable (barplot)
+    :param var_lab: labels for categories
+    :param y_lab1: label for y axisi for plot 1
+    :param y_lab2: label for y axisi for plot 1
+    :param order: number for the type of the plot (hatch)
+    :return: plot of two axis - first for the variables selected and the second for temperatures (pointplot)
+    '''
+
+
     ax2 = ax1.twinx()
     g = sns.barplot(data=df, x='Grupos', y=var, edgecolor='black', hue=var_lab, palette=['blue', 'red', 'green'],
                     ax=ax1)
@@ -25,6 +38,7 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
     else:
         ax1.set_ylim([0, 12])
     ax1.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
+
     g2 = sns.pointplot(data=df, x='Grupos', y='Temp', hue='Temp_lab', marker='o', sort=False, ax=ax2,
                       palette=['blue', 'red', 'green'])
     ax2.set_ylabel(y_lab2, fontsize=23)
@@ -36,15 +50,16 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
 
 
 def bar_line_plot(df,save_results,path,year):
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 9))
+    '''
 
-    #i1 = df.iloc[np.where(df.loc[:,'kpi_lab']=='i1')[0],:].reset_index(drop=True)
-    #i1=i1.sort_values('KPI')
-    #avg = df.iloc[np.where(df.loc[:,'kpi_lab']=='Avg')[0], :].reset_index(drop=True)
-    #a#g = avg.reindex(i1.index)
-    #i2 = df.iloc[np.where(df.loc[:,'kpi_lab']=='i2')[0],:].reset_index(drop=True)
-    #i2=i2.reindex(i1.index)
-    #df = pd.concat([avg, i1, i2], axis=0)
+    :param df: datos
+    :param save_results: guardamos gráficos?
+    :param path: localización para guardar gráficos
+    :param year: año donde empieza el análisis
+    :return: gráficos ajustados y guardados si queremos
+    '''
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 9))
 
     two_scales(df, ax1, 'KPI', 'kpi_lab', r'KPI (W/m $^{2}$ $\cdot$ $^\circ$C)', r'$\Delta$ T ($^\circ$C)', 1)
     two_scales(df, ax2, 'Cons', 'Cons_lab', r'Consumption (W/m$^{2}$)', r'$\Delta$ T ($^\circ$C)', 2)
@@ -55,50 +70,56 @@ def bar_line_plot(df,save_results,path,year):
         pp = sep.join([path, year])
         plt.savefig(pp + '\\' + 'g' + 'comparison' + '.png')
         plt.close()
-    #plt.show()
-    # sns.barplot(data=df, x='Grupos', y='KPI', hue='kpi_lab', alpha=0.5, ax=ax1)
-    # ax#2 = ax1.twinx()
-    # sns.lineplot(data=df['Temp'], hue=df['Temp_lab'], marker='o', sort=False, ax=ax2)
 
 
-def temporal_plot(dates, var, diff, grupos, lista, imbalances,save_results,path,year):
+def temporal_plot(dates, var, diff, grupos, lista, imbalances,save_results,path,year, smooth):
+    '''
+
+    :param dates: serie para las fechas
+    :param var: variable para gráficar
+    :param diff: salto térmico de los pisos con el exterior
+    :param grupos: número de grupos a buscar por k-means ([] calculamos el número óptimo)
+    :param lista: lista con los números de los pisos que forma cada grupo
+    :param imbalances: lista con los pisos detectados para las imbalances [0] imbalance type 1 [1] imbalance type 2
+    :param save_results: queremos guardar los gráficos?
+    :param path: donde guardarlos
+    :param year: año donde se empieza el análisis
+    :return: gráfico temporal analizando los consumos de los pisos detectados en comparación con los grupos.
+    '''
     for t in range(grupos):
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 9))
         kpi, temps = var.iloc[:, lista[t]], diff.iloc[:, lista[t]]
         kpi.index = dates
         ##################################################
+        #Force NaN in dates that are not considered
         st = dates[0]
         end = dates[len(dates)-1]
         new = pd.date_range(st, end, freq='H')
         kpi_new = kpi.reindex(new)
         kpi_new = kpi_new.replace(np.nan, 99999)
         ##################################################
+        #Resample for smothing the data in the plot
+        if smooth[0]==True:
+            kpi_new=kpi_new.resample(smooth[1]).sum()
+            kpi_new = kpi_new.where(kpi_new <100, np.nan)
+            temps.index = dates
+            temps=temps.resample(smooth[1]).mean()
+        else:
+            kpi_new = kpi_new.where(kpi_new < 100, np.nan)
 
-        kpi_new=kpi_new.resample('3H').sum()
-        kpi_new = kpi_new.where(kpi_new <100, np.nan)
-        #kpi=kpi.iloc[range(8*15),:]
-        temps.index = dates
-        temps=temps.resample('3H').mean()
-        #temps=temps.iloc[range(8*15),:]
-        #x = [datetime.strptime(str(d), "%Y-%m-%d %H:%M:%S").date() for d in dates]
         ax1.plot(kpi_new*1000, color='grey')
         ax2.plot(temps, color='grey')
 
+        #Destacamos detecciones si las hay
         if len(imbalances[0][t]):
             kpi1, temps1 = kpi_new.iloc[:, imbalances[0][t]], temps.iloc[:, imbalances[0][t]]
             ax1.plot(kpi_new.index, kpi1*1000, color='red', linewidth=2, label='Imbalance 1')
-            #ax1.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
             ax2.plot(temps.index, temps1, color='red', linewidth=2,label='Imbalance 1')
-            #ax2.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
-
-
 
         if len(imbalances[1][t]):
             kpi2, temps2 = kpi_new.iloc[:, imbalances[1][t]], temps.iloc[:, imbalances[1][t]]
             ax1.plot(kpi_new.index, kpi2*1000, color='green', linewidth=2, label='Imbalance 2')
-            #ax1.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
             ax2.plot(temps.index, temps2, color='green', linewidth=2, label='Imbalance 2')
-            #ax2.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
 
         ax1.set_ylabel(r'(W/m $^{2}$)', fontsize=23)
         ax1.set_xlabel('Time', fontsize=20, labelpad=8)
@@ -106,10 +127,11 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances,save_results,path,
         ax1.xaxis.set_major_locator(mdates.DayLocator(interval=15))
         ax1.tick_params('x', labelsize=15, labelrotation=45)
         ax1.tick_params('y', labelsize=15)
-        ax2.set_ylim([-1, 250])
         handles, labels = ax1.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
         ax1.legend(by_label.values(), by_label.keys(),fontsize=17)
+
+        ax2.set_ylim([-1, 250])
         ax2.set_ylabel(r'$\Delta$ T ($^\circ$C)', fontsize=23)
         ax2.set_xlabel('Time', fontsize=20, labelpad=8)
         ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
@@ -130,22 +152,25 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances,save_results,path,
 
 
 def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, nombres,portales,letras,pisos, save_results,
-              path):
+              path, smooth, datos_sotano):
     '''
+    :param dates: series con fechas
+    :param year: año donde empieza el análisis
     :param var: KPI
     :param var_con: Consumo específico
     :param diff: Salto termico
-    :param o: indices de pisos sin consumos
+    :param o_bool: indices de pisos con pocas horas de consumos
     :param exterior: Temperatura exterior
     :param rad: Irradiancia
-    :param horas:
-    :param bloque: Derechos o Villabuena
     :param grupos: Número de clusters
-    :param bloques: Factor diferenciando todos los pisos por bloques
-    :param nombres:
+    :param nombres: etiquetas de los pisos
+    :param portales: número de portales en el edificio
+    :param letras: número de letras en cada portal
+    :param pisos: número de pisos de edificio analizado
     :param save_results: Guardamos gráficos de grupos?
-    :param path:
+    :param path: donde guardar los gráficos
     :return: After create the matrix in which each row is a dwelling with its environment k-means is carried out. Base on each group the decompesations detection is performed.
+    - Entornos térmicos de cada uno de los grupos, gráficos de barras con los límites para poder seleccionar los pisos detectados, caracterizaciópn de cada grupos y de sus detecciones,
     '''
 
     print('start')
@@ -175,6 +200,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
         if len(indt) > 0:
             ind_out.append(indices1[i])
 
+    #Si hay días que no cumplen las condiciones se eleminan
     if len(np.concatenate(ind_out)) > 0:
         ind_out = np.concatenate(ind_out)
         var = var.drop(var.index[ind_out], axis=0)
@@ -201,7 +227,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
     matrix[:, 0] = df.iloc[:, 0]
     matrix[:, 1] = df.iloc[:, 1]
 
-    #portales medios
+    #Números de pisos que se corresponde con portales medios
     g, g2 = 0, 0
     ar = list()
     while g < portales:
@@ -209,11 +235,18 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
         g += 1
         g2 += letras
     ar_medios = np.concatenate(ar)
+
     portalesT = portales*letras
     portal = 1
     piso = 1
     mask_cosumo = -0.01
     mask_temp = 0
+
+    #Rellenamos matriz con los datos de los entornoos térmicos
+    #2-3 consumo y calefacción derecha
+    #4-5 consumo y calefacción arriba
+    #6-7 consumo y calefacción izquierda
+    #8-9 consumo y calefacción abajo
     for i in range(portalesT * pisos):
         print('PORTAL', portal)
         print('PISO', piso)
@@ -292,6 +325,8 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
             matrix[i, np.array([4, 5])] = np.array([df.iloc[i + letras, 0], df.iloc[i + letras, 1]])
             matrix[i, np.array([6, 7])] = np.array([df.iloc[i - (letras*pisos-2), 0], df.iloc[i - (letras*pisos-2), 1]])
             matrix[i, np.array([8, 9])] = np.array([df.iloc[i - letras, 0], df.iloc[i - letras, 1]])
+
+        #Condiciones para ir reseteando los valores de portal o piso
         if (i + 1) % letras == 0:
             piso += 1
         if (i + 1) in np.arange(letras*pisos, letras*pisos*(4-1)+1, letras*pisos):
@@ -306,21 +341,24 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
             portal = 10
         else:
             portal += 1
+
     # Eliminación de los bajos debido a la falta de datos de sus entornos
-    g,g2 = 0,0
-    ar = list()
-    while g < (portales):
-        ar.append(np.arange(0+g2,0+letras+g2))
-        g += 1
-        g2 += letras * pisos
-    ar = np.concatenate(ar)
-    matrix = np.delete(matrix, ar, 0)
-    var_con = var_con.drop(var_con.columns[ar], axis=1)
-    diff = diff.drop(diff.columns[ar], axis=1)
-    o_bool = np.delete(o_bool, ar)
-    var_con_sum = var_con_sum.drop(var_con_sum.index[ar], axis=0)
-    nombres = np.delete(nombres, ar, 0)
+    if datos_sotano==False:
+        g,g2 = 0,0
+        ar = list()
+        while g < (portales):
+            ar.append(np.arange(0+g2,0+letras+g2))
+            g += 1
+            g2 += letras * pisos
+        ar = np.concatenate(ar)
+        matrix = np.delete(matrix, ar, 0)
+        var_con = var_con.drop(var_con.columns[ar], axis=1)
+        diff = diff.drop(diff.columns[ar], axis=1)
+        o_bool = np.delete(o_bool, ar)
+        var_con_sum = var_con_sum.drop(var_con_sum.index[ar], axis=0)
+        nombres = np.delete(nombres, ar, 0)
     ##################################################################################################
+    #Eliminamos del análisis pisos con muy pocas horas de consumo
     o = np.where(o_bool == True)[0]
     matrix = np.delete(matrix, o, 0)
     var_con = var_con.drop(var_con.columns[o], axis=1)
@@ -340,10 +378,13 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
     if df_piso.isnull().values.any():
         raise NameError('Missing values in piso: REVISE DATA')
 
+
+    #Estamdarizamos datos
     scaler = StandardScaler()
     scaled_features = scaler.fit_transform(np.array(df_entorno))
 
     ####################################################################################
+    #Si no espeficicamos el nº de grupos buscamos cual podría ser el óptimo y paramos!
     if not grupos:
         kmeans_kwargs = {
             "init": "random",
@@ -379,13 +420,11 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
     kmeans.fit(scaled_features)
 
 
-    #labels_clean = np.delete(kmeans.labels_, o)
+    #Por grupo realizamos un gráfico de barras con los entornos térmicos de cada uno. Juntamos en lista cada uno de los pisos que forman cada grupo.
     lista = []
     for t in range(grupos):
         lista.append(np.where(kmeans.labels_ == t)[0])
-        #lista.append(np.where(labels_clean == t)[0])
         a = pd.DataFrame(df_entorno.iloc[np.where(kmeans.labels_ == t)[0], :])
-        #a = pd.DataFrame(df_entorno.iloc[np.where(labels_clean == t)[0], :])
         a1 = a.transpose()
         a1.index = ['Right', 'Up', 'Left', 'Down']
         a1.plot(figsize=(10, 5), kind='bar', color='blue', width=0.2, legend=False, edgecolor='black', fontsize=22,
@@ -393,7 +432,6 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
         plt.ylim(-3, 25)
         plt.ylabel(r'$\Delta$T [$^\circ$C]', fontsize=22)
         az = pd.DataFrame(df_entorno.iloc[np.where(kmeans.labels_ == t)[0], :])
-        #az = pd.DataFrame(df_entorno.iloc[np.where(labels_clean == t)[0], :])
         a = az[az >= 0].mean(axis=0, skipna=True)
         a.index = ['Right', 'Up', 'Left', 'Down']
         print('GRUPO', t, 'tiene de medias', a)
@@ -421,13 +459,11 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
     t_red = [0 for x in range(grupos)]
     t_green = [0 for x in range(grupos)]
 
-    #df_piso = df_piso.drop(df_piso.index[o], axis=0)
-    #var_con_sum = var_con_sum.drop(var_con_sum.index[o], axis=0)
-    #var_clean = var.drop(var.columns[o], axis=1)
-    #diff_clean = diff.drop(diff.columns[o], axis=1)
-
     imb1 = []
     imb2 = []
+
+    #Grupo a grupo detectamos los pisos de cada grupo y los límites para detectar imbalances. Se realiza un gráfico de barras mostrando los consumos medios y salto térmico medio
+    #comparados con los límites utilizados para las detecciones. Además se caracteriza cada grupo y cada grupo de pisos detectados con valores medios.
     for z in range(grupos):
         thermal = df_piso.iloc[lista[z], 0].reset_index(drop=True)
         cons_esp = var_con_sum.iloc[lista[z]].reset_index(drop=True)
@@ -486,6 +522,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
         except:
             pass
         imb1.append(candidates_final1)
+
         # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 1: KPI, Salto térmico y consumo especifíco
         detection_sup.append(names[candidates_final1])
         if len(candidates_final1) > 0:
@@ -503,7 +540,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
             print('Media consumo especifico de KPI alta y T baja',
                   t_red[z])
 
-        # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 2: KPI, Salto térmico y consumo especifíco
+        # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 3: KPI, Salto térmico y consumo especifíco
         # candidates = np.where(thermal > thermal_mean2_O)[0]
         # candidates2 = np.where(temp > temp_mean2_O)[0]
         # candidates_final = np.intersect1d(candidates, candidates2)
@@ -544,7 +581,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
         except:
             pass
         imb2.append(candidates_final2)
-        # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 3: KPI, Salto térmico y consumo especifíco
+        # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 2: KPI, Salto térmico y consumo especifíco
         detection_inf.append(names[candidates_final2])
         print('imba', imb2)
         if len(candidates_final2) > 0:
@@ -578,7 +615,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
         #    print('Media consumo especifico de KPI baja y T baja',
         #          np.round(np.mean(cons_esp.iloc[candidates_final][cons_esp.iloc[candidates_final] > 0]), 6))
 
-        # Limite para las descompensaciones TIPO 1 y 3
+        # Limite para las descompensaciones TIPO 1 y 2
         ax1.axvline(x=thermal_mean_O * 1000, linewidth=2, color='red')
         # ax1.axvline(x=thermal_mean2_O*1000, linewidth=2, color='red', linestyle='dashed')
         ax2.axvline(x=temp_mean_O, linewidth=2, color='red')
@@ -610,10 +647,10 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
         print('kWh bajos y Tº altos:', detection_inf[g])
         # print('kWh bajos y Tº bajos:', detection_inf_inf[g])
 
+    #Creamos un dataframe con los resultados: etiquetas de grupos, valores medio de grupos, valores medio por grupo de detección...
     kpi_final = np.concatenate((kpi_group, kpi_red, kpi_green)).reshape(-1, 1)
     temp_final = np.concatenate((t_group, t_red, t_green)).reshape(-1, 1)
     Q_final = np.concatenate((Q_group, Q_red, Q_green)).reshape(-1, 1)
-    # l1=np.concatenate((np.repeat('KPI', grupos), np.repeat('KPI i1', grupos), np.repeat('KPI i2', grupos))).reshape(-1,1)
     l1 = np.concatenate((np.repeat('Avg', grupos), np.repeat('i1', grupos), np.repeat('i2', grupos))).reshape(-1, 1)
     l2 = np.concatenate((np.repeat('Avg', grupos), np.repeat('i1', grupos), np.repeat('i2', grupos))).reshape(-1, 1)
     l3 = np.concatenate((np.repeat(r'$\Delta T$', grupos), np.repeat(r'$\Delta T$ i1', grupos),
@@ -630,18 +667,28 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
                                                                                               errors='coerce', axis=1)
     df_final.replace(0, np.nan, inplace=True)
 
+    #Creamos gráficos donde junstamos la comparación del KPI y los saltos térmicos y los consumos específicos con los saltos térmicos
     bar_line_plot(df_final,save_results,path,year)
 
-    temporal_plot(dates, var_con, diff, grupos, lista, [imb1, imb2],save_results, path, year)
+    #Creamos un gráfico temporal analizando los consumos y saltos térmicos de los pisos detectados
+    temporal_plot(dates, var_con, diff, grupos, lista, [imb1, imb2],save_results, path, year, smooth)
 
     print('FINISHED !!')
 
 
 def data_structure(cp, agregado, start, end):
+    '''
+
+    :param cp: path where to find the data
+    :param agregado: all the year available?
+    :param start: star year (from the indicated month)
+    :param end: end yeat (to the indicated month)
+    :return: the data joined in a dataframe each variable of interest: consumos, t_interior, t_exterio y radiancia
+    '''
     sep1 = "\\"
     year = [str(pd.to_datetime(start).year), str(pd.to_datetime(end).year)]
 
-    # Podemos coger todos los años o alguno de ellos (cogiendo dos años para coer los meses de invierno- finales y principios de año)
+    # Podemos coger todos los años o alguno de ellos (cogiendo dos años para coger los meses de invierno- finales y principios de año)
     if agregado == True:
         cp2 = sep1.join([cp, 'agregado_19-22'])
         consumos = pd.read_csv(sep1.join([cp2, 'consumos.csv']), decimal=',', sep=';', index_col=0)

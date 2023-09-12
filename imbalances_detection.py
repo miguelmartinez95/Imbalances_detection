@@ -31,6 +31,8 @@ agregado=False
 letras=3
 portales=3
 pisos=8
+datos_sotanos = False
+
 
 # Creamos variable que diferencia bloques por pisos (los dos edificios)
 bloques = np.concatenate([np.repeat('Derechos', 72), np.repeat('Villabuena', 54)])
@@ -57,4 +59,7 @@ t_int = t_int.iloc[:, np.where(bloques == edificio)[0]]
 m2 = pd.DataFrame(np.tile(np.array([84, 64, 84]), 24)) #Derechos
 #m2 = pd.DataFrame(np.tile(np.array([84, 64, 84]), 18)) #Villabuena
 
-decompesation_analisis(path2, consumos, t_int, t_out, rad, m2, min_horas, grupos,nombres, letras, portales, pisos, year, dates)
+#smoothing for the temporal plot
+smooth = [True, '3H']
+
+decompesation_analisis(path2, consumos, t_int, t_out, rad, m2, min_horas, grupos,nombres, letras, portales, pisos, year, dates,smooth, datos_sotano)

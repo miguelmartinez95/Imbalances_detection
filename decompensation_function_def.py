@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from functions_def import  detection
 
-def decompesation_analisis(path2, consumos, t_int, t_out, rad, m2, min_horas, grupos, nombres, letras, portales, pisos, year, dates):
+def decompesation_analisis(path2, consumos, t_int, t_out, rad, m2, min_horas, grupos, nombres, letras, portales, pisos, year, dates, smooth, datos_sotano):
     '''
     :param path2: ruta
     :param consumo:datos de consumos de calefacción
@@ -207,7 +207,7 @@ def decompesation_analisis(path2, consumos, t_int, t_out, rad, m2, min_horas, gr
     var = pd.DataFrame(var)
     var_con = pd.DataFrame(var_con)
 
-    detection(dates, year, var, var_con, diff, o_bool, t_out, rad, grupos,  nombres, portales, letras, pisos, True, path2)
+    detection(dates, year, var, var_con, diff, o_bool, t_out, rad, grupos,  nombres, portales, letras, pisos, True, path2, smooth, datos_sotano)
 
     print('PISOS SIN DATODS TEMPERATURA:', nombres[o1])
     print('PISOS SIN DATOS DE CONSUMO:', nombres[o2])
