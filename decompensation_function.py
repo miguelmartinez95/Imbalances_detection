@@ -213,3 +213,5 @@ def decompesation_analisis(path2, consumos, t_int, t_out, rad, m2, min_horas, gr
     print('PISOS SIN DATOS DE CONSUMO:', nombres[o2])
     print('PISOS ELIMINADOS POR NO CONSUMOS:', nombres[o])
 
+    print('FINISHED !!')
+
