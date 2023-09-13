@@ -3,10 +3,14 @@ Scripts and data used for developing the study of imbalances detection through r
 
 
 #Libraries
-numpy 1.21.6\\
+numpy 1.21.6
+
 pandas 1.3.4
+
 seaborn 0.11.2
+
 matplotlib 3.4.3
+
 scikit-learn 1.0
 
 
