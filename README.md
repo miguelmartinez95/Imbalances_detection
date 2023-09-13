@@ -2,7 +2,7 @@
 Scripts and data used for developing the study of imbalances detection through residential buildings. 
 
 
-#Libraries
+### Libraries
 numpy 1.21.6
 
 pandas 1.3.4
@@ -14,7 +14,7 @@ matplotlib 3.4.3
 scikit-learn 1.0
 
 
-Folders to perform imbalance search:
+### Folders to perform imbalance search:
 
 - Scripts: 
 
@@ -31,7 +31,7 @@ Folders to perform imbalance search:
 	Folder to save the generated plots: barras, grupos y temporales
 	
 
-#IMBALANCE SEARCH
+### IMBALANCE SEARCH
 
 This search is based on 2 decompesation types:
 
