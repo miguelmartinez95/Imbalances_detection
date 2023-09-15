@@ -62,4 +62,4 @@ m2 = pd.DataFrame(np.tile(np.array([84, 64, 84]), 24)) #Derechos
 #smoothing for the temporal plot
 smooth = [True, '3H']
 
-decompesation_analisis(path2, consumos, t_int, t_out, rad, m2, min_horas, grupos,nombres, letras, portales, pisos, year, dates,smooth, datos_sotanos)
+decompesation_analisis(path2, edificio, consumos, t_int, t_out, rad, m2, min_horas, grupos,nombres, letras, portales, pisos, year, dates,smooth, datos_sotanos)

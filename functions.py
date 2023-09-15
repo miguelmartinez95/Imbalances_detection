@@ -47,7 +47,7 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
     ax2.get_legend().remove()
 
 
-def bar_line_plot(df,save_results,path,year):
+def bar_line_plot(edificio, df,save_results,path,year):
     '''
 
     :param df: datos
@@ -66,11 +66,11 @@ def bar_line_plot(df,save_results,path,year):
     if save_results == True:
         sep = '\\'
         pp = sep.join([path, year])
-        plt.savefig(pp + '\\' + 'g' + 'comparison' + '.png')
+        plt.savefig(pp + '\\' + edificio+ 'g' + 'comparison' + '.png')
         plt.close()
 
 
-def temporal_plot(dates, var, diff, grupos, lista, imbalances,save_results,path,year, smooth):
+def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_results,path,year, smooth):
     '''
 
     :param dates: serie para las fechas
@@ -145,11 +145,11 @@ def temporal_plot(dates, var, diff, grupos, lista, imbalances,save_results,path,
         if save_results == True:
             sep = '\\'
             pp = sep.join([path, year])
-            plt.savefig(pp + '\\' + 'g' + str(t) + 'temporal' + '.png')
+            plt.savefig(pp + '\\' + edificio + 'g' + str(t) + 'temporal' + '.png')
             plt.close()
 
 
-def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, nombres,portales,letras,pisos, save_results,
+def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, nombres,portales,letras,pisos, save_results,
               path, smooth, datos_sotano):
     '''
     :param dates: series con fechas
@@ -440,7 +440,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
         if save_results == True:
             sep = '\\'
             pp = sep.join([path, year])
-            plt.savefig(pp + '\\' + 'g' + str(t) + '.png')
+            plt.savefig(pp + '\\' + edificio+ 'g' + str(t) + '.png')
             plt.close()
 
 
@@ -629,8 +629,7 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
         if save_results == True:
             sep = '\\'
             pp = sep.join([path, year])
-            print(pp + '\\' + 'g' + str(z) + 'detec' + '.png')
-            plt.savefig(pp + '\\' + 'g' + str(z) + 'detec' + '.png')
+            plt.savefig(pp + '\\' + edificio+ 'g' + str(z) + 'detec' + '.png')
             plt.close()
 
     # Printeamos los pisos que forman cada grupos además de los pisos detectados en las posibles descompesaciones
@@ -666,10 +665,10 @@ def detection(dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, no
     df_final.replace(0, np.nan, inplace=True)
 
     #Creamos gráficos donde junstamos la comparación del KPI y los saltos térmicos y los consumos específicos con los saltos térmicos
-    bar_line_plot(df_final,save_results,path,year)
+    bar_line_plot(edificio, df_final,save_results,path,year)
 
     #Creamos un gráfico temporal analizando los consumos y saltos térmicos de los pisos detectados
-    temporal_plot(dates, var_con, diff, grupos, lista, [imb1, imb2],save_results, path, year, smooth)
+    temporal_plot(edificio, dates, var_con, diff, grupos, lista, [imb1, imb2],save_results, path, year, smooth)
 
 
 def data_structure(cp, agregado, start, end):
