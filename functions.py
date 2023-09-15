@@ -157,7 +157,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
     :param var: KPI
     :param var_con: Consumo específico
     :param diff: Salto termico
-    :param o_bool: indices de pisos con pocas horas de consumos
+    :param o_bool: indices de pisos con poñcas horas de consumos
     :param exterior: Temperatura exterior
     :param rad: Irradiancia
     :param grupos: Número de clusters
