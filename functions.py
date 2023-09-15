@@ -66,7 +66,7 @@ def bar_line_plot(edificio, df,save_results,path,year):
     if save_results == True:
         sep = '\\'
         pp = sep.join([path, year])
-        plt.savefig(pp + '\\' + edificio+ '_g' + 'comparison' + '.png')
+        plt.savefig(pp + '\\' + edificio + '_g' + 'comparison' + '.png')
         plt.close()
 
 
@@ -629,7 +629,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         if save_results == True:
             sep = '\\'
             pp = sep.join([path, year])
-            plt.savefig(pp + '\\' + edificio+ '_g' + str(z) + 'detec' + '.png')
+            plt.savefig(pp + '\\' + edificio + '_g' + str(z) + 'detec' + '.png')
             plt.close()
 
     # Printeamos los pisos que forman cada grupos además de los pisos detectados en las posibles descompesaciones
