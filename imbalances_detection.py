@@ -26,11 +26,11 @@ start='2019-12-01 00:07:00'
 end='2020-03-28 23:07:00'
 min_horas = 5 #horas mínima de consumos para considerarlos
 grupos = 5
-edificio = 'Derechos'
+edificio = 'Villabuena'
 agregado=False
 letras=3
 portales=3
-pisos=8
+pisos=6
 datos_sotanos = False
 
 
@@ -49,15 +49,13 @@ else:
 nombres = t_int.columns
 t_out = t_ext.iloc[:, 4]
 rad = radiation.iloc[:, 4]
+m2 = pd.DataFrame(np.tile(np.array([84, 64, 84]), 42)) #metros cuadrados
 
 #Elegimos el edificio concreto
 consumos = consumos.iloc[:, np.where(bloques == edificio)[0]]
 nombres = nombres[np.where(bloques == edificio)[0]]
 t_int = t_int.iloc[:, np.where(bloques == edificio)[0]]
-
-#Metros cuadrados
-m2 = pd.DataFrame(np.tile(np.array([84, 64, 84]), 24)) #Derechos
-#m2 = pd.DataFrame(np.tile(np.array([84, 64, 84]), 18)) #Villabuena
+m2 = m2.iloc[np.where(bloques == edificio)[0]]
 
 #smoothing for the temporal plot
 smooth = [True, '3H']
