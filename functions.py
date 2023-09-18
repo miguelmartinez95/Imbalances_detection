@@ -38,7 +38,7 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
     ax1.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
 
     g2 = sns.pointplot(data=df, x='Grupos', y='Temp', hue='Temp_lab', marker='o', sort=False, ax=ax2,
-                      palette=['blue', 'red', 'green'])
+                      palette=['blue', 'red', 'green'], edgecolor='black')
     ax2.set_ylabel(y_lab2, fontsize=23)
     ax2.set_xlabel('')
     ax2.set_ylim([0, 18])
@@ -62,13 +62,12 @@ def bar_line_plot(edificio, df,save_results,path,year):
     two_scales(df, ax1, 'KPI', 'kpi_lab', r'KPI (W/m $^{2}$ $\cdot$ $^\circ$C)', r'$\Delta$ T ($^\circ$C)', 1)
     two_scales(df, ax2, 'Cons', 'Cons_lab', r'Consumption (W/m$^{2}$)', r'$\Delta$ T ($^\circ$C)', 2)
     plt.tight_layout(pad=3)
-    plt.show()
 
     if save_results == True:
         sep = '\\'
         pp = sep.join([path, year])
         plt.savefig(pp + '\\' + edificio + '_g' + 'comparison' + '.png')
-        plt.close()
+        plt.show()
 
 
 def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_results,path,year, smooth):
@@ -106,8 +105,8 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
         else:
             kpi_new = kpi_new.where(kpi_new < 100, np.nan)
 
-        ax1.plot(kpi_new*1000, color='grey')
-        ax2.plot(temps, color='grey')
+        ax1.plot(kpi_new*1000, color='grey',label='Normal')
+        ax2.plot(temps, color='grey',label='Normal')
 
         #Destacamos detecciones si las hay
         if len(imbalances[0][t]):
@@ -126,6 +125,7 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
         ax1.xaxis.set_major_locator(mdates.DayLocator(interval=15))
         ax1.tick_params('x', labelsize=15, labelrotation=45)
         ax1.tick_params('y', labelsize=15)
+
         handles, labels = ax1.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
         ax1.legend(by_label.values(), by_label.keys(),fontsize=17)
@@ -138,17 +138,18 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
         ax2.tick_params('x', labelsize=15, labelrotation=45)
         ax2.tick_params('y', labelsize=15)
         ax2.set_ylim([2, 26])
+        fig.subtitle('Grupo'+str(t), fontsize=22)
         handles, labels = ax2.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
         ax2.legend(by_label.values(), by_label.keys(), fontsize=17)
         plt.tight_layout(pad=4)
-        plt.show()
 
         if save_results == True:
             sep = '\\'
             pp = sep.join([path, year])
             plt.savefig(pp + '\\' + edificio + '_g' + str(t) + 'temporal' + '.png')
-            plt.close()
+            plt.show()
+
 
 
 def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, nombres,portales,letras,pisos, save_results,
@@ -431,6 +432,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
                 rot=0)
         plt.ylim(-3, 25)
         plt.ylabel(r'$\Delta$T [$^\circ$C]', fontsize=22)
+        plt.title('Grupo'+str(t), fontsize=23)
         az = pd.DataFrame(df_entorno.iloc[np.where(kmeans.labels_ == t)[0], :])
         a = az[az >= 0].mean(axis=0, skipna=True)
         a.index = ['Right', 'Up', 'Left', 'Down']
@@ -438,13 +440,12 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         a.plot(kind='bar', alpha=0.75, color='red', width=0.2, legend=False, edgecolor='black', figsize=(8, 6),
                fontsize=22, rot=0)
         plt.ylim(-3, 25)
-        plt.show()
 
         if save_results == True:
             sep = '\\'
             pp = sep.join([path, year])
             plt.savefig(pp + '\\' + edificio+ '_g' + str(t) + '.png')
-            plt.close()
+            plt.show()
 
 
     detection_sup = []
@@ -505,6 +506,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         ax2.set_ylabel('Dwellings', fontsize=20)
         ax2.set_yticks([])
 
+        fig.subtitle('Grupo'+ str(z), fontsize=22)
         # Tambien detectamos los pisos muy lejanos a la mediana de pisos con consumos positivos (por arriba) a la vez que no esten en el 25% con mayor salto termico
         d1 = np.where(thermal - thermal.iloc[thermal.index[thermal > 0]].quantile(0.5) > 0.003)[0]
         if len(d1) > 0:
@@ -627,14 +629,14 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         # ax1.axvline(x=thermal_mean2*1000, linewidth=2, color='green', linestyle='dashed')
         ax2.axvline(x=temp_mean, linewidth=2, color='green')
         # ax2.axvline(x=temp_mean2, linewidth=2, color='green', linestyle='dashed')
-        plt.show()
+
 
         fig.tight_layout(pad=2.0)
         if save_results == True:
             sep = '\\'
             pp = sep.join([path, year])
             plt.savefig(pp + '\\' + edificio + '_g' + str(z) + 'detec' + '.png')
-            plt.close()
+            plt.show()
 
     # Printeamos los pisos que forman cada grupos además de los pisos detectados en las posibles descompesaciones
     for g in range(grupos):
