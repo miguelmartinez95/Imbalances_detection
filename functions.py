@@ -638,8 +638,8 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         # ax1.axvline(x=thermal_mean2*1000, linewidth=2, color='green', linestyle='dashed')
         ax2.axvline(x=temp_mean, linewidth=2, color='green')
         # ax2.axvline(x=temp_mean2, linewidth=2, color='green', linestyle='dashed')
-        plt.draw()
-        plt.pause(0.001)
+        #plt.draw()
+        #plt.pause(0.001)
 
 
         fig.tight_layout(pad=2.0)
@@ -647,8 +647,8 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
             sep = '\\'
             pp = sep.join([path, year])
             plt.savefig(pp + '\\' + edificio + '_g' + str(z) + 'detec' + '.png')
-            plt.ion()
-            plt.show(block=False)
+            #plt.ion()
+            #plt.show(block=False)
 
     # Printeamos los pisos que forman cada grupos además de los pisos detectados en las posibles descompesaciones
     for g in range(grupos):
