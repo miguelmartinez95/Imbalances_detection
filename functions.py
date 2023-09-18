@@ -26,7 +26,7 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
     g.legend_.set_title(None)
     ax1.set_ylabel(y_lab1, fontsize=21)
     ax1.set_xlabel('')
-    ax1.tick_params(axis='x', labelsize=18)
+    ax1.tick_params(axis='x', labelsize=16)
     ax1.tick_params(axis='y', labelsize=22)
     if order == 2:
         for i, thisbar in enumerate(g.patches):
@@ -42,7 +42,7 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
     ax2.set_ylabel(y_lab2, fontsize=21)
     ax2.set_xlabel('')
     ax2.set_ylim([0, 18])
-    ax2.tick_params(axis='x', labelsize=18)
+    ax2.tick_params(axis='x', labelsize=16)
     ax2.tick_params(axis='y', labelsize=22)
     ax2.get_legend().remove()
     plt.draw()
