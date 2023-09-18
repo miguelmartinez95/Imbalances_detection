@@ -407,16 +407,18 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
             km = km.fit(scaled_features)
             Sum_of_squared_distances.append(km.inertia_)
 
+        opt = np.where(abs(np.diff(Sum_of_squared_distances)/ np.delete(Sum_of_squared_distances, len(Sum_of_squared_distances)-1)) <=0.15)[0][0]
+
+        print(abs(np.diff(Sum_of_squared_distances)/ np.delete(Sum_of_squared_distances, len(Sum_of_squared_distances)-1)))
+        print('Optimal number of groups:', K[opt+1])
+
         plt.plot(K, Sum_of_squared_distances, 'bx-')
         plt.xlabel('k')
         plt.ylabel('Sum_of_squared_distances')
         plt.title('Elbow Method For Optimal k')
         plt.show()
 
-        opt = np.where(abs(np.diff(Sum_of_squared_distances)/ np.delete(Sum_of_squared_distances, len(Sum_of_squared_distances)-1)) <=0.15)[0][0]
 
-        print(abs(np.diff(Sum_of_squared_distances)/ np.delete(Sum_of_squared_distances, len(Sum_of_squared_distances)-1)))
-        print('Optimal number of groups:', K[opt+1])
         raise NameError('Number of groups needed')
 
     kmeans = KMeans(
