@@ -407,10 +407,12 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
             km = km.fit(scaled_features)
             Sum_of_squared_distances.append(km.inertia_)
 
-        opt = np.where(abs(np.diff(Sum_of_squared_distances)/ np.delete(Sum_of_squared_distances, len(Sum_of_squared_distances)-1)) <=0.15)[0][0]
+        D=abs(np.diff(Sum_of_squared_distances))
+        for i in range(len(D)-1):
+            if abs(D[i+1]-D[i])/D[i]>0.5:
+                print('Optimal number of groups:', K[i + 1])
+                break
 
-        print(np.diff(Sum_of_squared_distances))
-        print('Optimal number of groups:', K[opt+1])
 
         plt.plot(K, Sum_of_squared_distances, 'bx-')
         plt.xlabel('k')
