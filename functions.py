@@ -37,7 +37,7 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
         ax1.set_ylim([0, 12])
     ax1.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
 
-    g2 = sns.pointplot(data=df, x='Grupos', y='Temp', hue='Temp_lab', marker='o', sort=False, ax=ax2,
+    sns.pointplot(data=df, x='Grupos', y='Temp', hue='Temp_lab', marker='o', sort=False, ax=ax2,
                       palette=['blue', 'red', 'green'], edgecolor='black',linewidth=3)
     ax2.set_ylabel(y_lab2, fontsize=23)
     ax2.set_xlabel('')
@@ -131,7 +131,7 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
 
         handles, labels = ax1.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
-        ax1.legend(by_label.values(), by_label.keys(),fontsize=15)
+        ax1.legend(by_label.values(), by_label.keys(),fontsize=17)
 
         ax2.set_ylim([-1, 250])
         ax2.set_ylabel(r'$\Delta$ T ($^\circ$C)', fontsize=23)
@@ -144,7 +144,7 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
         fig.suptitle('Grupo '+str(t), fontsize=22)
         handles, labels = ax2.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
-        ax2.legend(by_label.values(), by_label.keys(), fontsize=15)
+        ax2.legend(by_label.values(), by_label.keys(), fontsize=17)
         plt.tight_layout(pad=4)
         plt.draw()
         plt.pause(0.001)
