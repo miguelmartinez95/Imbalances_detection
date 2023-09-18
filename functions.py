@@ -21,7 +21,7 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
 
 
     ax2 = ax1.twinx()
-    g = sns.barplot(data=df, x='Grupos', y=var, edgecolor='black', hue=var_lab, palette=['blue', 'red', 'green'],
+    g = sns.barplot(data=df, x='Grupos', y=var, edgecolor='black', hue=var_lab, palette=['blue', 'darkred', 'green'],
                     ax=ax1)
     g.legend_.set_title(None)
     ax1.set_ylabel(y_lab1, fontsize=23)
@@ -38,7 +38,7 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
     ax1.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
 
     sns.pointplot(data=df, x='Grupos', y='Temp', hue='Temp_lab', marker='o', sort=False, ax=ax2,
-                      palette=['blue', 'red', 'green'], edgecolor='black',linewidth=3)
+                      palette=['blue', 'red', 'limegreen'], edgecolor='black',linewidth=3)
     ax2.set_ylabel(y_lab2, fontsize=23)
     ax2.set_xlabel('')
     ax2.set_ylim([0, 18])
