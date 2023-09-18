@@ -131,7 +131,7 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
 
         handles, labels = ax1.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
-        ax1.legend(by_label.values(), by_label.keys(),fontsize=17)
+        ax1.legend(by_label.values(), by_label.keys(),fontsize=15)
 
         ax2.set_ylim([-1, 250])
         ax2.set_ylabel(r'$\Delta$ T ($^\circ$C)', fontsize=23)
@@ -144,7 +144,7 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
         fig.suptitle('Grupo '+str(t), fontsize=22)
         handles, labels = ax2.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
-        ax2.legend(by_label.values(), by_label.keys(), fontsize=17)
+        ax2.legend(by_label.values(), by_label.keys(), fontsize=15)
         plt.tight_layout(pad=4)
         plt.draw()
         plt.pause(0.001)
