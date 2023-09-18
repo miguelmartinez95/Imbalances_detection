@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from functions import  detection
 
 def decompesation_analisis(path2, edificio, consumos, t_int, t_out, rad, m2, min_horas, grupos, nombres, letras, portales, pisos, year, dates, smooth, datos_sotano):
@@ -208,7 +209,7 @@ def decompesation_analisis(path2, edificio, consumos, t_int, t_out, rad, m2, min
     var_con = pd.DataFrame(var_con)
 
     detection(edificio, dates, year, var, var_con, diff, o_bool, t_out, rad, grupos,  nombres, portales, letras, pisos, True, path2, smooth, datos_sotano)
-
+    plt.show()
     print('PISOS SIN DATODS TEMPERATURA:', nombres[o1])
     print('PISOS SIN DATOS DE CONSUMO:', nombres[o2])
     print('PISOS ELIMINADOS POR NO CONSUMOS:', nombres[o])

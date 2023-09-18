@@ -688,6 +688,8 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
     #Creamos un gráfico temporal analizando los consumos y saltos térmicos de los pisos detectados
     temporal_plot(edificio, dates, var_con, diff, grupos, lista, [imb1, imb2],save_results, path, year, smooth)
 
+    plt.show()
+
 
 def data_structure(cp, agregado, start, end):
     '''
