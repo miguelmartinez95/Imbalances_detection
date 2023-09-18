@@ -67,6 +67,7 @@ def bar_line_plot(edificio, df,save_results,path,year):
         sep = '\\'
         pp = sep.join([path, year])
         plt.savefig(pp + '\\' + edificio + '_g' + 'comparison' + '.png')
+        plt.ion()
         plt.show()
 
 
@@ -138,7 +139,7 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
         ax2.tick_params('x', labelsize=15, labelrotation=45)
         ax2.tick_params('y', labelsize=15)
         ax2.set_ylim([2, 26])
-        fig.subtitle('Grupo'+str(t), fontsize=22)
+        fig.suptitle('Grupo '+str(t), fontsize=22)
         handles, labels = ax2.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
         ax2.legend(by_label.values(), by_label.keys(), fontsize=17)
@@ -148,6 +149,7 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
             sep = '\\'
             pp = sep.join([path, year])
             plt.savefig(pp + '\\' + edificio + '_g' + str(t) + 'temporal' + '.png')
+            plt.ion()
             plt.show()
 
 
@@ -432,7 +434,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
                 rot=0)
         plt.ylim(-3, 25)
         plt.ylabel(r'$\Delta$T [$^\circ$C]', fontsize=22)
-        plt.title('Grupo'+str(t), fontsize=23)
+        plt.title('Grupo '+str(t), fontsize=23)
         az = pd.DataFrame(df_entorno.iloc[np.where(kmeans.labels_ == t)[0], :])
         a = az[az >= 0].mean(axis=0, skipna=True)
         a.index = ['Right', 'Up', 'Left', 'Down']
@@ -445,6 +447,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
             sep = '\\'
             pp = sep.join([path, year])
             plt.savefig(pp + '\\' + edificio+ '_g' + str(t) + '.png')
+            plt.ion()
             plt.show()
 
 
@@ -506,7 +509,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         ax2.set_ylabel('Dwellings', fontsize=20)
         ax2.set_yticks([])
 
-        fig.subtitle('Grupo'+ str(z), fontsize=22)
+        fig.suptitle('Grupo '+ str(z), fontsize=22)
         # Tambien detectamos los pisos muy lejanos a la mediana de pisos con consumos positivos (por arriba) a la vez que no esten en el 25% con mayor salto termico
         d1 = np.where(thermal - thermal.iloc[thermal.index[thermal > 0]].quantile(0.5) > 0.003)[0]
         if len(d1) > 0:
@@ -636,6 +639,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
             sep = '\\'
             pp = sep.join([path, year])
             plt.savefig(pp + '\\' + edificio + '_g' + str(z) + 'detec' + '.png')
+            plt.ion()
             plt.show()
 
     # Printeamos los pisos que forman cada grupos además de los pisos detectados en las posibles descompesaciones
