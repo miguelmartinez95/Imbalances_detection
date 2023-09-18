@@ -67,8 +67,7 @@ def bar_line_plot(edificio, df,save_results,path,year):
         sep = '\\'
         pp = sep.join([path, year])
         plt.savefig(pp + '\\' + edificio + '_g' + 'comparison' + '.png')
-        plt.ion()
-        plt.show()
+        plt.show(block=False)
 
 
 def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_results,path,year, smooth):
@@ -149,8 +148,7 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
             sep = '\\'
             pp = sep.join([path, year])
             plt.savefig(pp + '\\' + edificio + '_g' + str(t) + 'temporal' + '.png')
-            plt.ion()
-            plt.show()
+            plt.show(block=False)
 
 
 
@@ -447,8 +445,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
             sep = '\\'
             pp = sep.join([path, year])
             plt.savefig(pp + '\\' + edificio+ '_g' + str(t) + '.png')
-            plt.ion()
-            plt.show()
+            plt.show(block=False)
 
 
     detection_sup = []
@@ -639,8 +636,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
             sep = '\\'
             pp = sep.join([path, year])
             plt.savefig(pp + '\\' + edificio + '_g' + str(z) + 'detec' + '.png')
-            plt.ion()
-            plt.show()
+            plt.show(block=False)
 
     # Printeamos los pisos que forman cada grupos además de los pisos detectados en las posibles descompesaciones
     for g in range(grupos):
@@ -679,6 +675,8 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
 
     #Creamos un gráfico temporal analizando los consumos y saltos térmicos de los pisos detectados
     temporal_plot(edificio, dates, var_con, diff, grupos, lista, [imb1, imb2],save_results, path, year, smooth)
+
+    plt.show()
 
 
 def data_structure(cp, agregado, start, end):
