@@ -25,12 +25,12 @@ path2 = r'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imb
 start='2019-12-01 00:07:00'
 end='2020-03-28 23:07:00'
 min_horas = 5 #horas mínima de consumos para considerarlos
-grupos = [] #if empty the function search for the optimal number
+grupos = 6 #if empty the function search for the optimal number
 edificio = 'Villabuena'
 agregado=False
 letras=3
 portales=3
-pisos=6
+pisos=6 #derechos 8 villabuena 6
 datos_sotanos = False
 
 

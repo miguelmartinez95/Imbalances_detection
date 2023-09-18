@@ -62,6 +62,7 @@ def bar_line_plot(edificio, df,save_results,path,year):
     two_scales(df, ax1, 'KPI', 'kpi_lab', r'KPI (W/m $^{2}$ $\cdot$ $^\circ$C)', r'$\Delta$ T ($^\circ$C)', 1)
     two_scales(df, ax2, 'Cons', 'Cons_lab', r'Consumption (W/m$^{2}$)', r'$\Delta$ T ($^\circ$C)', 2)
     plt.tight_layout(pad=3)
+    plt.show()
 
     if save_results == True:
         sep = '\\'
@@ -141,6 +142,7 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
         by_label = dict(zip(labels, handles))
         ax2.legend(by_label.values(), by_label.keys(), fontsize=17)
         plt.tight_layout(pad=4)
+        plt.show()
 
         if save_results == True:
             sep = '\\'
@@ -436,6 +438,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         a.plot(kind='bar', alpha=0.75, color='red', width=0.2, legend=False, edgecolor='black', figsize=(8, 6),
                fontsize=22, rot=0)
         plt.ylim(-3, 25)
+        plt.show()
 
         if save_results == True:
             sep = '\\'
@@ -624,6 +627,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         # ax1.axvline(x=thermal_mean2*1000, linewidth=2, color='green', linestyle='dashed')
         ax2.axvline(x=temp_mean, linewidth=2, color='green')
         # ax2.axvline(x=temp_mean2, linewidth=2, color='green', linestyle='dashed')
+        plt.show()
 
         fig.tight_layout(pad=2.0)
         if save_results == True:
