@@ -401,7 +401,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         }
 
         Sum_of_squared_distances = []
-        K = range(1, 20)
+        K = range(1, 15)
         for k in K:
             km = KMeans(n_clusters=k, **kmeans_kwargs)
             km = km.fit(scaled_features)
@@ -413,6 +413,8 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         plt.title('Elbow Method For Optimal k')
         plt.show()
 
+        opt = np.where(np.diff(np.concatenate(Sum_of_squared_distances))/ np.delete(np.concatenate(Sum_of_squared_distances), len(Sum_of_squared_distances)-1) <=0.10)
+        print('Optimal number of groups:', K[opt+1])
         raise NameError('Number of groups needed')
 
     kmeans = KMeans(
