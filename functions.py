@@ -414,6 +414,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         plt.show()
 
         opt = np.where(np.diff(Sum_of_squared_distances)/ np.delete(Sum_of_squared_distances, len(Sum_of_squared_distances)-1) <=0.025)[0][0]
+
         print('Optimal number of groups:', K[opt+1])
         raise NameError('Number of groups needed')
 
