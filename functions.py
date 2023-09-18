@@ -45,6 +45,8 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
     ax2.tick_params(axis='x', labelsize=21)
     ax2.tick_params(axis='y', labelsize=22)
     ax2.get_legend().remove()
+    plt.draw()
+    plt.pause(0.001)
 
 
 def bar_line_plot(edificio, df,save_results,path,year):
@@ -67,7 +69,8 @@ def bar_line_plot(edificio, df,save_results,path,year):
         sep = '\\'
         pp = sep.join([path, year])
         plt.savefig(pp + '\\' + edificio + '_g' + 'comparison' + '.png')
-        plt.show(block=False)
+        plt.ion()
+        plt.show()
 
 
 def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_results,path,year, smooth):
@@ -143,12 +146,15 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
         by_label = dict(zip(labels, handles))
         ax2.legend(by_label.values(), by_label.keys(), fontsize=17)
         plt.tight_layout(pad=4)
+        plt.draw()
+        plt.pause(0.001)
 
         if save_results == True:
             sep = '\\'
             pp = sep.join([path, year])
             plt.savefig(pp + '\\' + edificio + '_g' + str(t) + 'temporal' + '.png')
-            plt.show(block=False)
+            plt.ion()
+            plt.show()
 
 
 
@@ -440,12 +446,15 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         a.plot(kind='bar', alpha=0.75, color='red', width=0.2, legend=False, edgecolor='black', figsize=(8, 6),
                fontsize=22, rot=0)
         plt.ylim(-3, 25)
+        plt.draw()
+        plt.pause(0.001)
 
         if save_results == True:
             sep = '\\'
             pp = sep.join([path, year])
             plt.savefig(pp + '\\' + edificio+ '_g' + str(t) + '.png')
-            plt.show(block=False)
+            plt.ion()
+            plt.show()
 
 
     detection_sup = []
@@ -629,6 +638,8 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         # ax1.axvline(x=thermal_mean2*1000, linewidth=2, color='green', linestyle='dashed')
         ax2.axvline(x=temp_mean, linewidth=2, color='green')
         # ax2.axvline(x=temp_mean2, linewidth=2, color='green', linestyle='dashed')
+        plt.draw()
+        plt.pause(0.001)
 
 
         fig.tight_layout(pad=2.0)
@@ -636,7 +647,8 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
             sep = '\\'
             pp = sep.join([path, year])
             plt.savefig(pp + '\\' + edificio + '_g' + str(z) + 'detec' + '.png')
-            plt.show(block=False)
+            plt.ion()
+            plt.show()
 
     # Printeamos los pisos que forman cada grupos además de los pisos detectados en las posibles descompesaciones
     for g in range(grupos):
@@ -675,8 +687,6 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
 
     #Creamos un gráfico temporal analizando los consumos y saltos térmicos de los pisos detectados
     temporal_plot(edificio, dates, var_con, diff, grupos, lista, [imb1, imb2],save_results, path, year, smooth)
-
-    plt.show()
 
 
 def data_structure(cp, agregado, start, end):
