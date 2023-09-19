@@ -222,10 +222,12 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
     # Calculo de valores concretos para cada piso y para cada variable
     horas = pd.DataFrame(var_con > 0).sum(axis=0)
     o = np.where(horas.reset_index(drop=True) < min_horas)[0]
+
     if len(o):
         var = var.drop(var.columns[o], axis=0)
         var_con = var_con.drop(var_con.columns[o], axis=0)
         diff = diff.drop(diff.columns[o], axis=0)
+        horas = horas.drop(horas.index[o], axis=0)
 
     diff=diff.where(diff>2, np.nan)
     diff_mean = diff.mean(axis=0, skipna=True)
