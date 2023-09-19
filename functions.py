@@ -423,7 +423,6 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
             print('Condition not fulfill - The optimal number of groups woould be: ', c[0])
 
 
-
         plt.plot(K, Sum_of_squared_distances, 'bx-')
         plt.xlabel('k')
         plt.ylabel('Sum_of_squared_distances')
