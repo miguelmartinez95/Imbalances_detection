@@ -336,7 +336,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         #Condiciones para ir reseteando los valores de portal o piso
         if (i + 1) % letras == 0:
             piso += 1
-        if (i + 1) in np.arange(letras*pisos, letras*pisos*(4-1)+1, letras*pisos):
+        if (i + 1) in np.arange(letras*pisos, letras*pisos*(portales)+1, letras*pisos):
             piso = 1
         if (i + 1) % letras == 0 and (i + 1) < letras*pisos:
             portal = 1
