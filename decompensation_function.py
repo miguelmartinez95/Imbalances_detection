@@ -95,6 +95,7 @@ def decompesation_analisis(path2, edificio, consumos, t_int, t_out, rad, m2, min
 
         ar_izquierda_interior = np.concatenate(ar).tolist()
 
+        #Rellenamos los datos de pisos sin datos de temperatura con la media de sus entornos
         for g in range(len(o1)):
                 # Izquierda maximo
                 if o1[g] in np.arange(letras, pisos * letras - (letras * 2 - 1), letras):
