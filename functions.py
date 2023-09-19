@@ -409,10 +409,19 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
 
         D=abs(np.diff(Sum_of_squared_distances))
         print(D)
+        c=[]
+        z='no final'
         for i in range(len(D)-1):
-            if i>3 and abs(D[i+1]-D[i])/D[i]>0.45:
+            if D[i+1]/D[i]<0.45:
+                z='success'
                 print('Optimal number of groups:', K[i + 1])
                 break
+            elif D[i+1]/D[i]<0.70:
+                c.append(i+1)
+
+        if z=='success' and len(c)>0:
+            print('Condition not fuilfill - The optimal number of groups woould be: ', c[0])
+
 
 
         plt.plot(K, Sum_of_squared_distances, 'bx-')
