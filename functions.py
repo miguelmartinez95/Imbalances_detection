@@ -419,8 +419,8 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
             elif D[i+1]/D[i]<0.70:
                 c.append(i+1)
 
-        if z=='success' and len(c)>0:
-            print('Condition not fuilfill - The optimal number of groups woould be: ', c[0])
+        if z=='no final' and len(c)>0:
+            print('Condition not fulfill - The optimal number of groups woould be: ', c[0])
 
 
 
