@@ -159,7 +159,7 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
 
 
 def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, nombres,portales,letras,pisos, save_results,
-              path, smooth, datos_sotano):
+              path, smooth, min_horas,datos_sotano):
     '''
     :param dates: series con fechas
     :param year: año donde empieza el análisis
@@ -221,6 +221,12 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
     ###########################################################################
     # Calculo de valores concretos para cada piso y para cada variable
     horas = pd.DataFrame(var_con > 0).sum(axis=0)
+    o = np.where(horas.reset_index(drop=True) < min_horas)[0]
+    if len(o):
+        var = var.drop(var.columns[o], axis=0)
+        var_con = var_con.drop(var_con.columns[o], axis=0)
+        diff = diff.drop(diff.columns[o], axis=0)
+
     diff=diff.where(diff>2, np.nan)
     diff_mean = diff.mean(axis=0, skipna=True)
     var_sum = var.sum(axis=0) / np.array(horas)
@@ -368,11 +374,12 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
     ##################################################################################################
     #Eliminamos del análisis pisos con muy pocas horas de consumo
     o = np.where(o_bool == True)[0]
-    matrix = np.delete(matrix, o, 0)
-    var_con = var_con.drop(var_con.columns[o], axis=1)
-    diff = diff.drop(diff.columns[o], axis=1)
-    var_con_sum = var_con_sum.drop(var_con_sum.index[o], axis=0)
-    nombres = np.delete(nombres, o, 0)
+    if len(o)>0:
+        matrix = np.delete(matrix, o, 0)
+        var_con = var_con.drop(var_con.columns[o], axis=1)
+        diff = diff.drop(diff.columns[o], axis=1)
+        var_con_sum = var_con_sum.drop(var_con_sum.index[o], axis=0)
+        nombres = np.delete(nombres, o, 0)
     ##################################################################################################
     piso = matrix[:, np.array([0, 1])]
     entorno = matrix[:, np.array([3, 5, 7, 9])]
@@ -707,6 +714,8 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
     temporal_plot(edificio, dates, var_con, diff, grupos, lista, [imb1, imb2],save_results, path, year, smooth)
 
     plt.show()
+
+    print('PISOS ELIMINADOS POR NO CONSUMOS AL IMPONER CONDICIONES TERMICAS Y DE IRRADIANCIA:', nombres[o])
 
 
 def data_structure(cp, agregado, start, end):

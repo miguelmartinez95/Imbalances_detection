@@ -22,8 +22,8 @@ path=r'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imbala
 path2 = r'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imbalance_detection\Graficos'
 
 #Años 2019 y 2020 con horas en 00:07:00, el resto con 00:00:00
-start='2019-12-01 00:07:00'
-end='2020-03-28 23:07:00'
+start='2021-12-01 00:00:00'
+end='2022-03-28 23:00:00'
 min_horas = 5 #horas mínima de consumos para considerarlos
 grupos = 5 #if empty the function search for the optimal number
 edificio = 'Villabuena'

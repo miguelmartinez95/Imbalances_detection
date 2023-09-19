@@ -209,11 +209,21 @@ def decompesation_analisis(path2, edificio, consumos, t_int, t_out, rad, m2, min
     var = pd.DataFrame(var)
     var_con = pd.DataFrame(var_con)
 
-    detection(edificio, dates, year, var, var_con, diff, o_bool, t_out, rad, grupos,  nombres, portales, letras, pisos, True, path2, smooth, datos_sotano)
+    detection(edificio, dates, year, var, var_con, diff, o_bool, t_out, rad, grupos,  nombres, portales, letras, pisos, True, path2, smooth, min_horas,datos_sotano)
     plt.show()
-    print('PISOS SIN DATODS TEMPERATURA:', nombres[o1])
-    print('PISOS SIN DATOS DE CONSUMO:', nombres[o2])
-    print('PISOS ELIMINADOS POR NO CONSUMOS:', nombres[o])
+
+    try:
+        print('PISOS SIN DATODS TEMPERATURA:', nombres[o1])
+    except:
+        raise NameError('All dwelling have data of temperatures')
+    try:
+        print('PISOS SIN DATOS DE CONSUMO:', nombres[o2])
+    except:
+        raise NameError('All dwelling have data of consumptions')
+    try:
+        print('PISOS ELIMINADOS POR NO CONSUMOS:', nombres[o])
+    except:
+        raise NameError('NAny dwellibng has been eliminated for no comsuming')
 
     print('FINISHED !!')
 
