@@ -612,7 +612,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         imb2.append(candidates_final2)
         # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 2: KPI, Salto térmico y consumo especifíco
         detection_inf.append(names[candidates_final2])
-        print('imba', imb2)
+
         if len(candidates_final2) > 0:
             ax1.barh(thermal.index[candidates_final2], thermal.iloc[candidates_final2] * 1000, color='green')
             ax2.barh(temp.index[candidates_final2], temp.iloc[candidates_final2], color='green')
@@ -627,7 +627,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
                   )
             print('Media consumo especifico de KPI baja y T alta', t_green[z]
                   )
-        print('candi', candidates_final2)
+
         # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 4: KPI, Salto térmico y consumo especifíco
         # candidates = np.where(thermal < thermal_mean2)[0]
         # candidates2 = np.where(temp < temp_mean2)[0]
