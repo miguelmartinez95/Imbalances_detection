@@ -178,6 +178,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
     :param path: donde guardar los gráficos
     :return: After create the matrix in which each row is a dwelling with its environment k-means is carried out. Base on each group the decompesations detection is performed.
     - Entornos térmicos de cada uno de los grupos, gráficos de barras con los límites para poder seleccionar los pisos detectados, caracterizaciópn de cada grupos y de sus detecciones,
+    *** OJO: Solo adaptada para 4 bloques de las letras que sean ***
     '''
 
     print('start')
@@ -341,11 +342,11 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         if (i + 1) % letras == 0 and (i + 1) < letras*pisos:
             portal = 1
         elif (i + 1) % letras == 0 and (i + 1) >= letras*pisos and (i + 1) < letras*pisos*2:
-            portal = 4
+            portal = letras+1
         elif (i + 1) % letras == 0 and (i + 1) >= letras*pisos*2 and (i + 1) < letras*pisos*3:
-            portal = 7
+            portal = letras*2+1
         elif (i + 1) % letras == 0 and (i + 1) >= letras*pisos*3 and (i + 1) < letras*pisos*4:
-            portal = 10
+            portal = letras*3+1
         else:
             portal += 1
 
