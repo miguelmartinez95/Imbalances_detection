@@ -101,7 +101,7 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
         ##################################################
         #Resample for smothing the data in the plot
         if smooth[0]==True:
-            kpi_new=kpi_new.resample(smooth[1]).sum()
+            kpi_new=kpi_new.resample(smooth[1]).sum() #suma sería
             kpi_new = kpi_new.where(kpi_new <100, np.nan)
             temps.index = dates
             temps=temps.resample(smooth[1]).mean()
@@ -122,7 +122,7 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
             ax1.plot(kpi_new.index, kpi2*1000, color='green', linewidth=2, label='Imbalance 2')
             ax2.plot(temps.index, temps2, color='green', linewidth=2, label='Imbalance 2')
 
-        ax1.set_ylabel(r'(W/m $^{2}$)', fontsize=23)
+        ax1.set_ylabel(r'(W/(h $\cdot$ m $^{2}$)', fontsize=23)
         ax1.set_xlabel('Time', fontsize=20, labelpad=8)
         ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
         ax1.xaxis.set_major_locator(mdates.DayLocator(interval=15))
