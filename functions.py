@@ -364,6 +364,7 @@ def detection(edificio, dates, year, var, var_con, diff,  exterior, rad, grupos,
         diff = diff.drop(diff.columns[ar], axis=1)
         var_con_sum = var_con_sum.drop(var_con_sum.index[ar], axis=0)
         nombres = np.delete(nombres, ar, 0)
+        horas = horas.drop(horas.index[ar], axis=0)
     ##################################################################################################
     #Eliminamos del análisis pisos con muy pocas horas de consumo
     o = np.where(horas.reset_index(drop=True) < min_horas)[0]
