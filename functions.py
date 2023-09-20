@@ -376,12 +376,13 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         nombres = np.delete(nombres, ar, 0)
     ##################################################################################################
     #Eliminamos del análisis pisos con muy pocas horas de consumo
-    o = np.where(horas.reset_index(drop=True) < 5)[0]
+    o = np.where(horas.reset_index(drop=True) < min_horas)[0]
     if len(o) > 0:
         matrix = np.delete(matrix, o, 0)
         var_con = var_con.drop(var_con.columns[o], axis=1)
         diff = diff.drop(diff.columns[o], axis=1)
         var_con_sum = var_con_sum.drop(var_con_sum.index[o], axis=0)
+        deleted = nombres[o]
         nombres = np.delete(nombres, o, 0)
     ##################################################################################################
     piso = matrix[:, np.array([0, 1])]
@@ -719,7 +720,7 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
     plt.show()
 
     try:
-        print('PISOS ELIMINADOS POR NO CONSUMOS:', nombres[o])
+        print('PISOS ELIMINADOS POR NO CONSUMOS:', deleted)
     except:
         raise NameError('No dwellibng has been eliminated for no comsuming')
 
