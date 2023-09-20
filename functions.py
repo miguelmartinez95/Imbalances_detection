@@ -505,6 +505,7 @@ def detection(edificio, dates, year, var, var_con, diff,  exterior, rad, grupos,
         Q_group[z] = np.round(np.mean(cons_esp[cons_esp > 0]), 6)
         t_group[z] = np.round(np.mean(temp[temp > 0]), 6)
 
+        print('########### GRUPO', z, '########')
         print('Media thermal GRUPO', z, kpi_group[z])
         print('Media consumo_esp GRUPO', z, Q_group[z])
         print('Media temp GRUPO', z, t_group[z])
