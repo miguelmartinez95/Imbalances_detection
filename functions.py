@@ -378,6 +378,8 @@ def detection(edificio, dates, year, var, var_con, diff,  exterior, rad, grupos,
         deleted = nombres[o]
         nombres = np.delete(nombres, o, 0)
     ##################################################################################################
+    days= int(diff.shape[0]/24)
+
     piso = matrix[:, np.array([0, 1])]
     entorno = matrix[:, np.array([3, 5, 7, 9])]
 
@@ -716,6 +718,8 @@ def detection(edificio, dates, year, var, var_con, diff,  exterior, rad, grupos,
     temporal_plot(edificio, dates, var_con, diff, grupos, lista, [imb1, imb2],save_results, path, year, smooth)
 
     plt.show()
+
+    print('SE HAN ANALIZADO', days, 'días')
 
     try:
         print('PISOS ELIMINADOS POR NO CONSUMOS:', deleted)
