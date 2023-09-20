@@ -158,7 +158,7 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
 
 
 
-def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, grupos, nombres,portales,letras,pisos, save_results,
+def detection(edificio, dates, year, var, var_con, diff,  exterior, rad, grupos, nombres,portales,letras,pisos, save_results,
               path, smooth, min_horas,datos_sotano):
     '''
     :param dates: series con fechas
@@ -166,7 +166,6 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
     :param var: KPI
     :param var_con: Consumo específico
     :param diff: Salto termico
-    :param o_bool: indices de pisos con poñcas horas de consumos
     :param exterior: Temperatura exterior
     :param rad: Irradiancia
     :param grupos: Número de clusters
@@ -363,12 +362,13 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         matrix = np.delete(matrix, ar, 0)
         var_con = var_con.drop(var_con.columns[ar], axis=1)
         diff = diff.drop(diff.columns[ar], axis=1)
-        o_bool = np.delete(o_bool, ar)
         var_con_sum = var_con_sum.drop(var_con_sum.index[ar], axis=0)
         nombres = np.delete(nombres, ar, 0)
     ##################################################################################################
     #Eliminamos del análisis pisos con muy pocas horas de consumo
     o = np.where(horas.reset_index(drop=True) < min_horas)[0]
+    # Sustituyo los pisos con 0 horas para no reventar la division
+    horas[np.where(horas.reset_index(drop=True) < 1)[0]] = np.repeat(1, len(np.where(horas.reset_index(drop=True) < 1)[0]))
     if len(o) > 0:
         matrix = np.delete(matrix, o, 0)
         var_con = var_con.drop(var_con.columns[o], axis=1)

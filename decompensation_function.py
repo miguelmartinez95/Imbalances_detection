@@ -183,11 +183,8 @@ def decompesation_analisis(path2, edificio, consumos, t_int, t_out, rad, m2, min
     var_con = np.zeros((consumos.shape[0], consumos.shape[1]))
 
     # Detectamos pisos que tienen menos de x horas de consumos para luego no tenerlos en cuenta en la última detección
-    o = np.where(horas.reset_index(drop=True) < min_horas)[0]
-    o_bool = np.array(horas.reset_index(drop=True) < min_horas)
-
-    # Sustituyo los pisos con 0 horas para no reventar la division
-    horas[np.where(horas.reset_index(drop=True) < 1)[0]] = np.repeat(1, len(np.where(horas.reset_index(drop=True) < 1)[0]))
+    #o = np.where(horas.reset_index(drop=True) < min_horas)[0]
+    #o_bool = np.array(horas.reset_index(drop=True) < min_horas)
 
     # Forzamos a tener saltos térmicos vacíos si no hay datos de consumos
     for w in range(consumos.shape[1]):
@@ -209,7 +206,7 @@ def decompesation_analisis(path2, edificio, consumos, t_int, t_out, rad, m2, min
     var = pd.DataFrame(var)
     var_con = pd.DataFrame(var_con)
 
-    detection(edificio, dates, year, var, var_con, diff, o_bool, t_out, rad, grupos,  nombres, portales, letras, pisos, True, path2, smooth, min_horas,datos_sotano)
+    detection(edificio, dates, year, var, var_con, diff,t_out, rad, grupos,  nombres, portales, letras, pisos, True, path2, smooth, min_horas,datos_sotano)
     plt.show()
 
     try:
