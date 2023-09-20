@@ -538,131 +538,135 @@ def detection(edificio, dates, year, var, var_con, diff,  exterior, rad, grupos,
         ax2.set_yticks([])
 
         fig.suptitle('Grupo '+ str(z), fontsize=22)
-        # Tambien detectamos los pisos muy lejanos a la mediana de pisos con consumos positivos (por arriba) a la vez que no esten en el 25% con mayor salto termico
-        d1 = np.where(thermal - thermal.iloc[thermal.index[thermal > 0]].quantile(0.5) > 0.003)[0]
-        if len(d1) > 0:
-            t1 = np.where(temp[d1] < temp.iloc[temp.index[thermal > 0]].quantile(0.75))[0]
-            if len(t1 > 0):
-                candidates0 = d1[t1]
 
-        candidates = np.where(thermal > thermal_mean_O)[0]
-        candidates2 = np.where(temp < temp_mean_O)[0]
-        candidates_final1 = np.intersect1d(candidates, candidates2)
+        if len(lista[z]>=3):
+            # Tambien detectamos los pisos muy lejanos a la mediana de pisos con consumos positivos (por arriba) a la vez que no esten en el 25% con mayor salto termico
+            d1 = np.where(thermal - thermal.iloc[thermal.index[thermal > 0]].quantile(0.5) > 0.003)[0]
+            if len(d1) > 0:
+                t1 = np.where(temp[d1] < temp.iloc[temp.index[thermal > 0]].quantile(0.75))[0]
+                if len(t1 > 0):
+                    candidates0 = d1[t1]
 
-
-        try:
-            candidates_final1 = np.union1d(candidates_final1, candidates0)
-            del candidates0
-        except:
-            pass
-        imb1.append(candidates_final1)
-
-        # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 1: KPI, Salto térmico y consumo especifíco
-        detection_sup.append(names[candidates_final1])
-        if len(candidates_final1) > 0:
-            ax1.barh(thermal.index[candidates_final1], thermal.iloc[candidates_final1] * 1000, color='red')
-            ax2.barh(temp.index[candidates_final1], temp.iloc[candidates_final1], color='red')
-            kpi_red[z] = np.round(np.mean(thermal.iloc[candidates_final1][thermal.iloc[candidates_final1] > 0]), 6)
-            t_red[z] = np.round(np.mean(temp.iloc[candidates_final1][temp.iloc[candidates_final1] > 0]), 6)
-            Q_red[z] = np.round(np.mean(cons_esp.iloc[candidates_final1][cons_esp.iloc[candidates_final1] > 0]), 6)
-
-            print('GRUPO', z)
-            print('Media KPI de KPI alta y T baja', kpi_red[z]
-                  )
-            print('Media Salto termico de KPI alta y T baja',
-                  Q_red[z])
-            print('Media consumo especifico de KPI alta y T baja',
-                  t_red[z])
-
-        # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 3: KPI, Salto térmico y consumo especifíco
-        # candidates = np.where(thermal > thermal_mean2_O)[0]
-        # candidates2 = np.where(temp > temp_mean2_O)[0]
-        # candidates_final = np.intersect1d(candidates, candidates2)
-        # detection_sup_sup.append(names[candidates_final])
-        # if len(candidates_final) > 0:
-        #    ax1.barh(candidates_final, thermal.iloc[candidates_final]*1000, color='blue')
-        #    ax2.barh(candidates_final, temp.iloc[candidates_final], color='blue')
-        #    print('GRUPO', z)
-        #    print('Media KPI de KPI alta y T alta',
-        #          np.round(np.mean(thermal.iloc[candidates_final][thermal.iloc[candidates_final] > 0]), 6))
-        #    print('Media Salto termico de KPI alta y T alta',
-        #          np.round(np.mean(temp.iloc[candidates_final][temp.iloc[candidates_final] > 0]), 6))
-        #    print('Media consumo especifico de KPI alta y T alta',
-        #          np.round(np.mean(cons_esp.iloc[candidates_final][cons_esp.iloc[candidates_final] > 0]), 6))
-
-        # Otros Percentiles utilizados para las detecciones
-        thermal_mean = thermal.iloc[thermal.index[thermal > 0]].quantile(0.25)
-        # thermal_mean2 = thermal.iloc[thermal.index[thermal > 0]].quantile(0.1)
-        temp_mean = temp.iloc[temp.index[thermal > 0]].quantile(0.5)
-        # temp_mean2 = temp.iloc[temp.index[temp > 0]].quantile(0.25)
-        #
-
-        # Tambien detectamos los pisos muy lejanos a la mediana de pisos con consumos positivos (por abajo) a la vez que no esten en el 25% con menor salto termico
-        d1 = np.where(thermal - thermal.iloc[thermal.index[thermal > 0]].quantile(0.5) < -0.003)[0]
-        if len(d1) > 0:
-            t1 = np.where(temp[d1] > temp.iloc[temp.index[thermal > 0]].quantile(0.25))[0]
-            if len(t1 > 0):
-                candidates0 = d1[t1]
-
-        candidates = np.where(thermal < thermal_mean)[0]
-        candidates2 = np.where(temp > temp_mean)[0]
-        candidates_final2 = np.intersect1d(candidates, candidates2)
+            candidates = np.where(thermal > thermal_mean_O)[0]
+            candidates2 = np.where(temp < temp_mean_O)[0]
+            candidates_final1 = np.intersect1d(candidates, candidates2)
 
 
-        try:
-            candidates_final2 = np.union1d(candidates_final2, candidates0)
-            del candidates0
-        except:
-            pass
-        imb2.append(candidates_final2)
-        # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 2: KPI, Salto térmico y consumo especifíco
-        detection_inf.append(names[candidates_final2])
+            try:
+                candidates_final1 = np.union1d(candidates_final1, candidates0)
+                del candidates0
+            except:
+                pass
+            imb1.append(candidates_final1)
 
-        if len(candidates_final2) > 0:
-            ax1.barh(thermal.index[candidates_final2], thermal.iloc[candidates_final2] * 1000, color='green')
-            ax2.barh(temp.index[candidates_final2], temp.iloc[candidates_final2], color='green')
-            kpi_green[z] = np.round(np.mean(thermal.iloc[candidates_final2][thermal.iloc[candidates_final2] > 0]), 6)
-            t_green[z] = np.round(np.mean(temp.iloc[candidates_final2][temp.iloc[candidates_final2] > 0]), 6)
-            Q_green[z] = np.round(np.mean(cons_esp.iloc[candidates_final2][cons_esp.iloc[candidates_final2] > 0]), 6)
+            # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 1: KPI, Salto térmico y consumo especifíco
+            detection_sup.append(names[candidates_final1])
+            if len(candidates_final1) > 0:
+                ax1.barh(thermal.index[candidates_final1], thermal.iloc[candidates_final1] * 1000, color='red')
+                ax2.barh(temp.index[candidates_final1], temp.iloc[candidates_final1], color='red')
+                kpi_red[z] = np.round(np.mean(thermal.iloc[candidates_final1][thermal.iloc[candidates_final1] > 0]), 6)
+                t_red[z] = np.round(np.mean(temp.iloc[candidates_final1][temp.iloc[candidates_final1] > 0]), 6)
+                Q_red[z] = np.round(np.mean(cons_esp.iloc[candidates_final1][cons_esp.iloc[candidates_final1] > 0]), 6)
 
-            print('GRUPO', z)
-            print('Media KPI de KPI baja y T alta', kpi_green[z]
-                  )
-            print('Media Salto termico de KPI baja y T alta', Q_green[z]
-                  )
-            print('Media consumo especifico de KPI baja y T alta', t_green[z]
-                  )
+                print('GRUPO', z)
+                print('Media KPI de KPI alta y T baja', kpi_red[z]
+                      )
+                print('Media Salto termico de KPI alta y T baja',
+                      Q_red[z])
+                print('Media consumo especifico de KPI alta y T baja',
+                      t_red[z])
 
-        # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 4: KPI, Salto térmico y consumo especifíco
-        # candidates = np.where(thermal < thermal_mean2)[0]
-        # candidates2 = np.where(temp < temp_mean2)[0]
-        # candidates_final = np.intersect1d(candidates, candidates2)
-        # detection_inf_inf.append(names[candidates_final])
-        # if len(candidates_final) > 0:
-        #    ax1.barh(candidates_final, thermal.iloc[candidates_final]*1000, color='purple')
-        #    ax2.barh(candidates_final, temp.iloc[candidates_final], color='purple')
-        #    print('GRUPO', z)
-        #    print('Media KPI de KPI baja y T baja',
-        #          np.round(np.mean(thermal.iloc[candidates_final][thermal.iloc[candidates_final] > 0]), 6))
-        #    print('Media Salto termico de KPI baja y T baja',
-        #          np.round(np.mean(temp.iloc[candidates_final][temp.iloc[candidates_final] > 0]), 6))
-        #    print('Media consumo especifico de KPI baja y T baja',
-        #          np.round(np.mean(cons_esp.iloc[candidates_final][cons_esp.iloc[candidates_final] > 0]), 6))
+            # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 3: KPI, Salto térmico y consumo especifíco
+            # candidates = np.where(thermal > thermal_mean2_O)[0]
+            # candidates2 = np.where(temp > temp_mean2_O)[0]
+            # candidates_final = np.intersect1d(candidates, candidates2)
+            # detection_sup_sup.append(names[candidates_final])
+            # if len(candidates_final) > 0:
+            #    ax1.barh(candidates_final, thermal.iloc[candidates_final]*1000, color='blue')
+            #    ax2.barh(candidates_final, temp.iloc[candidates_final], color='blue')
+            #    print('GRUPO', z)
+            #    print('Media KPI de KPI alta y T alta',
+            #          np.round(np.mean(thermal.iloc[candidates_final][thermal.iloc[candidates_final] > 0]), 6))
+            #    print('Media Salto termico de KPI alta y T alta',
+            #          np.round(np.mean(temp.iloc[candidates_final][temp.iloc[candidates_final] > 0]), 6))
+            #    print('Media consumo especifico de KPI alta y T alta',
+            #          np.round(np.mean(cons_esp.iloc[candidates_final][cons_esp.iloc[candidates_final] > 0]), 6))
 
-        # Limite para las descompensaciones TIPO 1 y 2
-        ax1.axvline(x=thermal_mean_O * 1000, linewidth=2, color='red')
-        # ax1.axvline(x=thermal_mean2_O*1000, linewidth=2, color='red', linestyle='dashed')
-        ax2.axvline(x=temp_mean_O, linewidth=2, color='red')
-        # ax2.axvline(x=temp_mean2_O, linewidth=2, color='red',linestyle='dashed')
+            # Otros Percentiles utilizados para las detecciones
+            thermal_mean = thermal.iloc[thermal.index[thermal > 0]].quantile(0.25)
+            # thermal_mean2 = thermal.iloc[thermal.index[thermal > 0]].quantile(0.1)
+            temp_mean = temp.iloc[temp.index[thermal > 0]].quantile(0.5)
+            # temp_mean2 = temp.iloc[temp.index[temp > 0]].quantile(0.25)
+            #
 
-        # Limite para las descompensaciones TIPO 2 y 4
-        ax1.axvline(x=thermal_mean * 1000, linewidth=2, color='green')
-        # ax1.axvline(x=thermal_mean2*1000, linewidth=2, color='green', linestyle='dashed')
-        ax2.axvline(x=temp_mean, linewidth=2, color='green')
-        # ax2.axvline(x=temp_mean2, linewidth=2, color='green', linestyle='dashed')
-        #plt.draw()
-        #plt.pause(0.001)
+            # Tambien detectamos los pisos muy lejanos a la mediana de pisos con consumos positivos (por abajo) a la vez que no esten en el 25% con menor salto termico
+            d1 = np.where(thermal - thermal.iloc[thermal.index[thermal > 0]].quantile(0.5) < -0.003)[0]
+            if len(d1) > 0:
+                t1 = np.where(temp[d1] > temp.iloc[temp.index[thermal > 0]].quantile(0.25))[0]
+                if len(t1 > 0):
+                    candidates0 = d1[t1]
 
+            candidates = np.where(thermal < thermal_mean)[0]
+            candidates2 = np.where(temp > temp_mean)[0]
+            candidates_final2 = np.intersect1d(candidates, candidates2)
+
+
+            try:
+                candidates_final2 = np.union1d(candidates_final2, candidates0)
+                del candidates0
+            except:
+                pass
+            imb2.append(candidates_final2)
+            # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 2: KPI, Salto térmico y consumo especifíco
+            detection_inf.append(names[candidates_final2])
+
+            if len(candidates_final2) > 0:
+                ax1.barh(thermal.index[candidates_final2], thermal.iloc[candidates_final2] * 1000, color='green')
+                ax2.barh(temp.index[candidates_final2], temp.iloc[candidates_final2], color='green')
+                kpi_green[z] = np.round(np.mean(thermal.iloc[candidates_final2][thermal.iloc[candidates_final2] > 0]), 6)
+                t_green[z] = np.round(np.mean(temp.iloc[candidates_final2][temp.iloc[candidates_final2] > 0]), 6)
+                Q_green[z] = np.round(np.mean(cons_esp.iloc[candidates_final2][cons_esp.iloc[candidates_final2] > 0]), 6)
+
+                print('GRUPO', z)
+                print('Media KPI de KPI baja y T alta', kpi_green[z]
+                      )
+                print('Media Salto termico de KPI baja y T alta', Q_green[z]
+                      )
+                print('Media consumo especifico de KPI baja y T alta', t_green[z]
+                      )
+
+            # Printeamos info de cada uno de los grupos en base a la descompesacion TIPO 4: KPI, Salto térmico y consumo especifíco
+            # candidates = np.where(thermal < thermal_mean2)[0]
+            # candidates2 = np.where(temp < temp_mean2)[0]
+            # candidates_final = np.intersect1d(candidates, candidates2)
+            # detection_inf_inf.append(names[candidates_final])
+            # if len(candidates_final) > 0:
+            #    ax1.barh(candidates_final, thermal.iloc[candidates_final]*1000, color='purple')
+            #    ax2.barh(candidates_final, temp.iloc[candidates_final], color='purple')
+            #    print('GRUPO', z)
+            #    print('Media KPI de KPI baja y T baja',
+            #          np.round(np.mean(thermal.iloc[candidates_final][thermal.iloc[candidates_final] > 0]), 6))
+            #    print('Media Salto termico de KPI baja y T baja',
+            #          np.round(np.mean(temp.iloc[candidates_final][temp.iloc[candidates_final] > 0]), 6))
+            #    print('Media consumo especifico de KPI baja y T baja',
+            #          np.round(np.mean(cons_esp.iloc[candidates_final][cons_esp.iloc[candidates_final] > 0]), 6))
+
+            # Limite para las descompensaciones TIPO 1 y 2
+            ax1.axvline(x=thermal_mean_O * 1000, linewidth=2, color='red')
+            # ax1.axvline(x=thermal_mean2_O*1000, linewidth=2, color='red', linestyle='dashed')
+            ax2.axvline(x=temp_mean_O, linewidth=2, color='red')
+            # ax2.axvline(x=temp_mean2_O, linewidth=2, color='red',linestyle='dashed')
+
+            # Limite para las descompensaciones TIPO 2 y 4
+            ax1.axvline(x=thermal_mean * 1000, linewidth=2, color='green')
+            # ax1.axvline(x=thermal_mean2*1000, linewidth=2, color='green', linestyle='dashed')
+            ax2.axvline(x=temp_mean, linewidth=2, color='green')
+            # ax2.axvline(x=temp_mean2, linewidth=2, color='green', linestyle='dashed')
+            #plt.draw()
+            #plt.pause(0.001)
+
+        else:
+            print('Grupo', str(z), 'son muy pocos para dectecciones')
 
         fig.tight_layout(pad=2.0)
         if save_results == True:
