@@ -369,7 +369,7 @@ def detection(edificio, dates, year, var, var_con, diff,  exterior, rad, grupos,
     #Eliminamos del análisis pisos con muy pocas horas de consumo
     o = np.where(horas.reset_index(drop=True) < min_horas)[0]
     # Sustituyo los pisos con 0 horas para no reventar la division
-    horas[np.where(horas.reset_index(drop=True) < 1)[0]] = np.repeat(1, len(np.where(horas.reset_index(drop=True) < 1)[0]))
+    horas.iloc[np.where(horas.reset_index(drop=True) < 1)[0]] = np.repeat(1, len(np.where(horas.reset_index(drop=True) < 1)[0]))
     if len(o) > 0:
         matrix = np.delete(matrix, o, 0)
         var_con = var_con.drop(var_con.columns[o], axis=1)
