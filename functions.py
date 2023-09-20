@@ -694,7 +694,7 @@ def detection(edificio, dates, year, var, var_con, diff,  exterior, rad, grupos,
                          np.repeat(r'$\Delta T$ i2', grupos))).reshape(-1, 1)
     l4 = []
     for t in range(grupos):
-        text = 'Group' + str(t + 1)
+        text = 'G' + str(t + 1)
         l4.append(text)
     l4 = np.array(l4)
     l4 = np.tile(l4, int(len(kpi_final) / grupos)).reshape(-1, 1)
