@@ -224,10 +224,11 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
     o = np.where(horas.reset_index(drop=True) < min_horas)[0]
 
     if len(o):
-        var = var.drop(var.columns[o], axis=0)
-        var_con = var_con.drop(var_con.columns[o], axis=0)
-        diff = diff.drop(diff.columns[o], axis=0)
+        var = var.drop(var.columns[o], axis=1)
+        var_con = var_con.drop(var_con.columns[o], axis=1)
+        diff = diff.drop(diff.columns[o], axis=1)
         horas = horas.drop(horas.index[o], axis=0)
+        nombres = np.delete(nombres, o)
 
     diff=diff.where(diff>2, np.nan)
     diff_mean = diff.mean(axis=0, skipna=True)
@@ -375,8 +376,8 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
         nombres = np.delete(nombres, ar, 0)
     ##################################################################################################
     #Eliminamos del análisis pisos con muy pocas horas de consumo
-    o = np.where(o_bool == True)[0]
-    if len(o)>0:
+    o = np.where(horas.reset_index(drop=True) < 5)[0]
+    if len(o) > 0:
         matrix = np.delete(matrix, o, 0)
         var_con = var_con.drop(var_con.columns[o], axis=1)
         diff = diff.drop(diff.columns[o], axis=1)
@@ -717,7 +718,10 @@ def detection(edificio, dates, year, var, var_con, diff, o_bool, exterior, rad, 
 
     plt.show()
 
-    print('PISOS ELIMINADOS POR NO CONSUMOS AL IMPONER CONDICIONES TERMICAS Y DE IRRADIANCIA:', nombres[o])
+    try:
+        print('PISOS ELIMINADOS POR NO CONSUMOS:', nombres[o])
+    except:
+        raise NameError('No dwellibng has been eliminated for no comsuming')
 
 
 def data_structure(cp, agregado, start, end):

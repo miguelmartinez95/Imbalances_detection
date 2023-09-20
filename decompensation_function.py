@@ -220,10 +220,6 @@ def decompesation_analisis(path2, edificio, consumos, t_int, t_out, rad, m2, min
         print('PISOS SIN DATOS DE CONSUMO:', nombres[o2])
     except:
         raise NameError('All dwelling have data of consumptions')
-    try:
-        print('PISOS ELIMINADOS POR NO CONSUMOS:', nombres[o])
-    except:
-        raise NameError('NAny dwellibng has been eliminated for no comsuming')
 
     print('FINISHED !!')
 
