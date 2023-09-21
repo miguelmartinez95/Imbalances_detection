@@ -26,11 +26,11 @@ start='2021-12-01 00:00:00'
 end='2022-03-28 23:00:00'
 min_horas = 5 #horas mínima de consumos para considerarlos
 grupos = 5 #if empty the function search for the optimal number
-edificio = 'Villabuena' #**OJO**: Villabuena tiene que tener los datos C,B,A (está al revés) para que funcione bien
-agregado=False
+edificio = 'Derechos' #**OJO**: Villabuena tiene que tener los datos C,B,A (está al revés) para que funcione bien
+agregado=True
 letras=3
 portales=3
-pisos=6  #derechos 8 villabuena 6
+pisos=8  #derechos 8 villabuena 6
 datos_sotanos = False
 
 

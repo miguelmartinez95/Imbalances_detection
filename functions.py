@@ -35,7 +35,7 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
         ax1.set_ylim([0, 120])
     else:
         ax1.set_ylim([0, 12])
-    ax1.legend(loc='upper left', fontsize=16, fancybox=True, framealpha=0.5)
+    ax1.legend(loc='upper left', fontsize=18, fancybox=True, framealpha=0.5)
 
     sns.pointplot(data=df, x='Grupos', y='Temp', hue='Temp_lab', marker='o', sort=False, ax=ax2,
                       palette=['blue', 'red', 'green'], marksize=2,scale=1.2)
