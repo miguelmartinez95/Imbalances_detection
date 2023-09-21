@@ -45,8 +45,6 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
     ax2.tick_params(axis='x', labelsize=16)
     ax2.tick_params(axis='y', labelsize=22)
     ax2.get_legend().remove()
-    plt.draw()
-    plt.pause(0.001)
 
 
 def bar_line_plot(edificio, df,save_results,path,year):
@@ -63,7 +61,10 @@ def bar_line_plot(edificio, df,save_results,path,year):
 
     two_scales(df, ax1, 'KPI', 'kpi_lab', r'KPI (W/m $^{2}$ $\cdot$ $^\circ$C)', r'$\Delta$ T ($^\circ$C)', 1)
     two_scales(df, ax2, 'Cons', 'Cons_lab', r'Consumption (W/m$^{2}$)', r'$\Delta$ T ($^\circ$C)', 2)
-    plt.tight_layout(pad=3)
+    plt.tight_layout(pad=6)
+    plt.draw()
+    plt.pause(0.001)
+
 
     if save_results == True:
         sep = '\\'
