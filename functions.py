@@ -35,7 +35,7 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
         ax1.set_ylim([0, 120])
     else:
         ax1.set_ylim([0, 12])
-    ax1.legend(loc='upper left', fontsize=18, fancybox=True, framealpha=0.5)
+    ax1.legend(loc='upper left', fontsize=21, fancybox=True, framealpha=0.5)
 
     sns.pointplot(data=df, x='Grupos', y='Temp', hue='Temp_lab', marker='o', sort=False, ax=ax2,
                       palette=['blue', 'red', 'green'], marksize=2,scale=1.2)
@@ -61,7 +61,7 @@ def bar_line_plot(edificio, df,save_results,path,year):
 
     two_scales(df, ax1, 'KPI', 'kpi_lab', r'KPI (W/m $^{2}$ $\cdot$ $^\circ$C)', r'$\Delta$ T ($^\circ$C)', 1)
     two_scales(df, ax2, 'Cons', 'Cons_lab', r'Consumption (W/m$^{2}$)', r'$\Delta$ T ($^\circ$C)', 2)
-    plt.tight_layout(pad=6)
+    plt.tight_layout(pad=8)
     plt.draw()
     plt.pause(0.001)
 
