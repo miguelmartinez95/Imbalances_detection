@@ -117,9 +117,14 @@ def data_structure(path, agregado, start, end, bloques, bloque):
         dates = pd.to_datetime(consumos.index, format='%d/%m/%Y %H:%M')
         stop = np.where(dates == '2022-02-06 23:00:00')[0][0]
         consumos = consumos.iloc[range(stop + 1)]
+        dates2=dates.iloc[range(stop + 1)]
+        consumos.index = dates2
         t_ext = t_out.iloc[range(stop + 1)]
+        t_ext.index=dates2
         t_int = t_int.iloc[range(stop + 1)]
+        t_int.index =dates2
         radiation = radiation.iloc[range(stop + 1)]
+        radiation.index=dates2
         t_int = t_int.replace(',', '.', regex=True)
 
         place = np.where(bloques == bloque)[0]
@@ -142,28 +147,28 @@ def data_structure(path, agregado, start, end, bloques, bloque):
                 ind = np.where(dates == pd.to_datetime(start))[0][0]
                 consumos1 = consumos.iloc[range(ind, consumos.shape[0]), :]
                 t_int1 = t_int.iloc[range(ind, t_int.shape[0]), :]
-                t_int1 = t_int1.replace(',', '.', regex=True)
                 t_ext1 = t_out.iloc[range(ind, t_int.shape[0]), :]
                 radiation1 = radiation.iloc[range(ind, t_int.shape[0]), :]
 
-                consumos1.index = dates
-                t_int1.index = dates
-                t_ext1.index = dates
-                radiation1.index = dates
+                dates2 = dates.iloc[range(ind, consumos.shape[0])]
+                consumos1.index = dates2
+                t_int1.index =  dates2
+                t_ext1.index =  dates2
+                radiation1.index =  dates2
             else:
                 ind = np.where(dates == pd.to_datetime(end))[0][0]
                 consumos2 = consumos.iloc[range(ind + 1), :]
                 t_int2 = t_int.iloc[range(ind + 1), :]
-                t_int2 = t_int2.replace(',', '.', regex=True)
                 t_ext2 = t_out.iloc[range(ind + 1), :]
                 radiation2 = radiation.iloc[range(ind + 1), :]
-                dates = dates[range(ind + 1)]
-                consumos2.index = dates
+
+                dates2=dates.iloc[range(ind + 1)]
+                consumos2.index = dates2
                 consumos2.columns = consumos1.columns
-                t_int2.index = dates
+                t_int2.index = dates2
                 t_int2.columns = t_int1.columns
-                t_ext2.index = dates
-                radiation2.index = dates
+                t_ext2.index = dates2
+                radiation2.index = dates2
 
         place = np.where(bloques == bloque)[0]
         original = pd.concat([consumos1, consumos2], axis=0)
