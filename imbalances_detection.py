@@ -9,10 +9,10 @@ url2 = 'https://raw.githubusercontent.com/miguelmartinez95/Imbalances_detection/
 filename, headers = urllib.request.urlretrieve(url2, filename=r'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imbalance_detection\Scripts\functions.py')
 
 #Ejemplo de path (where the scripts are)
-sys.path.insert(1, 'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imbalance_detection')
+sys.path.insert(0, 'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imbalance_detection')
 from functions import data_structure, calculate_dt, check_data, check_diff, calculate_kpi
 from functions import detec_out_days, acumulated, create_matrix, environment,environment_analysis
-from functions import fix_dataframe, deletion, delete_dwellings_no_cons, delete_missing_env
+from functions import deletion, delete_dwellings_no_cons, delete_missing_env
 from functions import test_data, clustering, plot_environment, detection_imbalances, info_detections, \
     create_dataframe, bar_line_plot
 
