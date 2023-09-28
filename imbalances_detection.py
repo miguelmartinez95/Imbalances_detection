@@ -76,7 +76,7 @@ diff, out2 = check_data(diff, 'temp')
 out_empty = np.union1d(out, out2)
 
 diff = environment_analysis(diff, consumos, pisos, letras, portales,nombres)
-diff_complete = environment_analysis(diff_complete, consumos, pisos, letras, portales,nombres)
+diff_complete = environment_analysis(diff_complete, complete, pisos, letras, portales,nombres_complete)
 
 diffT, diff = check_diff(diff, consumos)
 diffT_complete, diff_complete = check_diff(diff_complete, complete)

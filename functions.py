@@ -431,12 +431,25 @@ def environment_analysis(diff, consumos, pisos, letras, portales,nombres):
 
     return diff
 
+def d_medios(portales,letras):
+    # Números de pisos que se corresponde con portales medios
+    g, g2 = 0, 0
+    ar = list()
+    while g < portales:
+        ar.append(np.arange(2 + g2, letras + g2, 1))
+        g += 1
+        g2 += letras
+    ar_medios = np.concatenate(ar)
+    return ar_medios
 
-def environment(df, matrix,var_con, diff, var_con_sum, nombres, horas, datos_sotano):
+def environment(df, matrix,var_con, diff, var_con_sum,letras,pisos,portales, nombres, horas, datos_sotano):
     portal = 1
     piso = 1
     mask_cosumo = -0.01
     mask_temp = 0
+    portalesT = portales*letras
+
+    ar_medios = d_medios(portales, letras)
 
     #Rellenamos matriz con los datos de los entornoos térmicos
     #2-3 consumo y calefacción derecha
