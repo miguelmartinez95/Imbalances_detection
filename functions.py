@@ -944,9 +944,9 @@ def check_data(data, type):
     if type == 'consumption':
         d[d <= 0] = 0
     else:
-        d[d <= 1] = np.nan
+        d[data <= 1] = np.nan
 
-    o = np.where(d.isna().sum(axis=0) > int(d.shape[0] / 3))[0]
+    o = np.where(d.isna().sum(axis=0) > int(d.shape[0] / 2))[0]
 
     return data, o
 
