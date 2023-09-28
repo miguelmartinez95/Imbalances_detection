@@ -47,7 +47,7 @@ bloques = pd.DataFrame(bloques).astype('category')
 #temperatures.csv
 #t_exterior.csv
 #radiation.csv
-complete, temp_complete, consumos, t_int, t_ext, radiation, m2_complete, m2= data_structure(path, agregado, start, end, bloques, edificio)
+complete, temp_complete, consumos, t_int, t_ext, radiation, m2_complete, m2= data_structure(path, agregado, start, end, bloques, bloque)
 
 nombres = consumos.columns
 nombres_complete = complete.columns

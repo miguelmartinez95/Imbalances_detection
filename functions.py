@@ -120,6 +120,7 @@ def data_structure(path, agregado, start, end, bloques, bloque):
         t_ext = t_out.iloc[range(stop + 1)]
         t_int = t_int.iloc[range(stop + 1)]
         radiation = radiation.iloc[range(stop + 1)]
+        t_int = t_int.replace(',', '.', regex=True)
 
         place = np.where(bloques == bloque)[0]
         original = pd.DataFrame(consumos)
@@ -141,6 +142,7 @@ def data_structure(path, agregado, start, end, bloques, bloque):
                 ind = np.where(dates == pd.to_datetime(start))[0][0]
                 consumos1 = consumos.iloc[range(ind, consumos.shape[0]), :]
                 t_int1 = t_int.iloc[range(ind, t_int.shape[0]), :]
+                t_int1 = t_int1.replace(',', '.', regex=True)
                 t_ext1 = t_out.iloc[range(ind, t_int.shape[0]), :]
                 radiation1 = radiation.iloc[range(ind, t_int.shape[0]), :]
 
@@ -152,6 +154,7 @@ def data_structure(path, agregado, start, end, bloques, bloque):
                 ind = np.where(dates == pd.to_datetime(end))[0][0]
                 consumos2 = consumos.iloc[range(ind + 1), :]
                 t_int2 = t_int.iloc[range(ind + 1), :]
+                t_int2 = t_int2.replace(',', '.', regex=True)
                 t_ext2 = t_out.iloc[range(ind + 1), :]
                 radiation2 = radiation.iloc[range(ind + 1), :]
                 dates = dates[range(ind + 1)]
@@ -920,10 +923,11 @@ def detection_imbalances(df_piso, var_con_sum, lista,nombres,path,year,save_resu
 
 
 def check_data(data, type):
+    d=data.copy()
     if type == 'consumption':
-        data[data <= 0] = 0
+        d[d <= 0] = 0
     else:
-        data[data <= 2] = np.nan
+        d[data <= 1] = np.nan
 
     o = np.where(data.isna().sum(axis=0) > int(data.shape[0] / 3))[0]
 
