@@ -34,6 +34,7 @@ letras=3
 portales=3
 pisos=8  #derechos 8 villabuena 6
 datos_sotanos = False
+save_results=False
 #smoothing for the temporal plot
 smooth = [True, '3H']
 
@@ -105,7 +106,7 @@ matrix, df = create_matrix(var_sum, diff_mean)
 matrix_complete, df_complete = create_matrix(var_sum_complete, diff_mean_complete)
 matrix= environment(df, matrix,letras,pisos,portales)
 
-# Delete empty dwellings
+# Delete empty dwellings and first floors
 matrix, var_con_sum, nombres, horas = deletion(matrix, var_con_sum, nombres, horas, out_empty, datos_sotanos,portales,letras,pisos)
 
 # Eliminamos del análisis pisos con muy pocas horas de consumo

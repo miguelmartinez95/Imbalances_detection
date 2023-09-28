@@ -832,24 +832,24 @@ def create_dataframe(kpi, temp, Q, grupos):
 def deletion(matrix, var_con_sum, nombres, horas, out, datos_sotano,portales,letras,pisos):
     print('Dwellings with too much empty cells: ', nombres[out])
 
-    if len(out) > 0:
-        matrix = np.delete(matrix, out, axis=0)
-        var_con_sum = var_con_sum.drop(var_con_sum.index[out])
-        horas = horas.drop(horas.index[out], axis=0)
-        nombres = np.delete(nombres, out)
-
-    if datos_sotano==False:
-        g,g2 = 0,0
+    if datos_sotano == False:
+        g, g2 = 0, 0
         ar = list()
         while g < (portales):
-            ar.append(np.arange(0+g2,0+letras+g2))
+            ar.append(np.arange(0 + g2, 0 + letras + g2))
             g += 1
             g2 += letras * pisos
         ar = np.concatenate(ar)
-        matrix = np.delete(matrix, ar, 0)
-        var_con_sum = var_con_sum.drop(var_con_sum.index[ar], axis=0)
-        nombres = np.delete(nombres, ar, 0)
-        horas = horas.drop(horas.index[ar], axis=0)
+        out_total = np.union1d(out,ar )
+    else:
+        out_total=out
+
+    if len(out_total) > 0:
+        matrix = np.delete(matrix, out_total, axis=0)
+        var_con_sum = var_con_sum.drop(var_con_sum.index[out_total])
+        horas = horas.drop(horas.index[out_total], axis=0)
+        nombres = np.delete(nombres, out_total)
+
 
     return matrix, var_con_sum, nombres, horas
 
