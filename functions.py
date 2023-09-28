@@ -946,7 +946,7 @@ def check_data(data, type):
     else:
         d[data <= 1] = np.nan
 
-    o = np.where(data.isna().sum(axis=0) > int(data.shape[0] / 3))[0]
+    o = np.where(d.isna().sum(axis=0) > int(d.shape[0] / 3))[0]
 
     return data, o
 
