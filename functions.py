@@ -125,7 +125,6 @@ def data_structure(path, agregado, start, end, bloques, bloque):
         t_int.index =dates2
         radiation = radiation.iloc[range(stop + 1)]
         radiation.index=dates2
-        t_int = t_int.replace(',', '.', regex=True)
 
         place = np.where(bloques == bloque)[0]
         original = pd.DataFrame(consumos)
