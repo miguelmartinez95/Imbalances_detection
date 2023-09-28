@@ -14,6 +14,7 @@ from pathlib import Path
 
 def to_number(df):
     df = df.replace(' ', np.nan)
+    df.replace(',','.',regex=True)
     for t in range(df.shape[1]):
         df.iloc[:, t] = pd.to_numeric(df.iloc[:, t])
     return df
