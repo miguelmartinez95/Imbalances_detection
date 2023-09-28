@@ -656,17 +656,17 @@ def clustering(df_entorno, grupos):
 
 def plot_conditions(thermal, temp, z):
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
+    ax1.set_xlim(0, np.max(thermal.values)+np.max(thermal.values)/4)
     ax1.barh(thermal.index, thermal, color='black')
 
-    ax1.set_xlim(0, np.max(thermal)+int(np.max(thermal)/4))
     ax1.tick_params(axis='x', labelsize=18)
     ax1.tick_params(axis='y', labelsize=18)
     ax1.set_yticks([])
     ax1.set_xlabel('KPI [W/(m$^2 \cdot ^\circ$C)]', fontsize=20)
     ax1.set_ylabel('Dwellings', fontsize=20)
 
+    ax2.set_xlim(0, np.max(temp.values)+np.max(temp.values)/4)
     ax2.barh(temp.index, temp, color='black')
-    ax2.set_xlim(0, np.max(temp)+int(np.max(temp)/4))
     ax2.tick_params(axis='x', labelsize=18)
     ax2.tick_params(axis='y', labelsize=18)
     ax2.set_xlabel(r'$\Delta$T [$^\circ$C]', fontsize=20)
@@ -674,6 +674,9 @@ def plot_conditions(thermal, temp, z):
     ax2.set_yticks([])
 
     fig.suptitle('Grupo ' + str(z), fontsize=22)
+
+    return ax1, ax2, fig
+
 
     return ax1, ax2, fig
 
@@ -701,33 +704,39 @@ def candidates(thermal, temp, type):
         temp_mean = temp.iloc[temp.index[thermal > 0]].quantile(0.5)
         # temp_mean2_O = temp.iloc[temp.index[temp > 0]].quantile(0.75)
 
-        # Tambien detectamos los pisos muy lejanos a la mediana (mediana + 2*std) de pisos con consumos positivos (por arriba) a la vez que no esten en el 25% con mayor salto termico
-        d1 = np.where(thermal - (thermal.iloc[thermal.index[thermal > 0]].quantile(0.5) + 2 * (
-            np.std(thermal.iloc[thermal.index[thermal > 0]]))) > 0)[0]
-        if len(d1) > 0:
-            t1 = np.where(temp[d1] < temp.iloc[temp.index[thermal > 0]].quantile(0.75))[0]
-            if len(t1 > 0):
-                candidates0 = d1[t1]
+        if len(thermal) >= 3:
+            # Tambien detectamos los pisos muy lejanos a la mediana (mediana + 2*std) de pisos con consumos positivos (por arriba) a la vez que no esten en el 25% con mayor salto termico
+            d1 = np.where(thermal - (thermal.iloc[thermal.index[thermal > 0]].quantile(0.5) + 2 * (
+                np.std(thermal.iloc[thermal.index[thermal > 0]]))) > 0)[0]
+            if len(d1) > 0:
+                t1 = np.where(temp[d1] < temp.iloc[temp.index[thermal > 0]].quantile(0.75))[0]
+                if len(t1 > 0):
+                    candidates0 = d1[t1]
 
-        candidates = np.where(thermal > thermal_mean)[0]
-        candidates2 = np.where(temp < temp_mean)[0]
-        candidates_final = np.intersect1d(candidates, candidates2)
+            candidates = np.where(thermal > thermal_mean)[0]
+            candidates2 = np.where(temp < temp_mean)[0]
+            candidates_final = np.intersect1d(candidates, candidates2)
+        else:
+            candidates_final = []
     else:
         thermal_mean = thermal.iloc[thermal.index[thermal > 0]].quantile(0.25)
         # thermal_mean2 = thermal.iloc[thermal.index[thermal > 0]].quantile(0.1)
         temp_mean = temp.iloc[temp.index[thermal > 0]].quantile(0.5)
 
-        # Tambien detectamos los pisos muy lejanos a la mediana de pisos con consumos positivos (por abajo) a la vez que no esten en el 25% con menor salto termico
-        d1 = np.where(thermal - (thermal.iloc[thermal.index[thermal > 0]].quantile(0.5) - 2 * (
-            np.std(thermal.iloc[thermal.index[thermal > 0]]))) < 0)[0]
-        if len(d1) > 0:
-            t1 = np.where(temp[d1] > temp.iloc[temp.index[thermal > 0]].quantile(0.25))[0]
-            if len(t1 > 0):
-                candidates0 = d1[t1]
+        if len(thermal) >= 3:
+            # Tambien detectamos los pisos muy lejanos a la mediana de pisos con consumos positivos (por abajo) a la vez que no esten en el 25% con menor salto termico
+            d1 = np.where(thermal - (thermal.iloc[thermal.index[thermal > 0]].quantile(0.5) - 2 * (
+                np.std(thermal.iloc[thermal.index[thermal > 0]]))) < 0)[0]
+            if len(d1) > 0:
+                t1 = np.where(temp[d1] > temp.iloc[temp.index[thermal > 0]].quantile(0.25))[0]
+                if len(t1 > 0):
+                    candidates0 = d1[t1]
 
-        candidates = np.where(thermal < thermal_mean)[0]
-        candidates2 = np.where(temp > temp_mean)[0]
-        candidates_final = np.intersect1d(candidates, candidates2)
+            candidates = np.where(thermal < thermal_mean)[0]
+            candidates2 = np.where(temp > temp_mean)[0]
+            candidates_final = np.intersect1d(candidates, candidates2)
+        else:
+            candidates_final = []
 
     try:
         candidates_final = np.union1d(candidates_final, candidates0)
@@ -770,6 +779,7 @@ def groups_info(df_piso, var_con_sum, lista, kpi, temp_list, Q, nombres, z):
     kpi[z] = np.round(np.mean(thermal[thermal > 0]), 6)
     Q[z] = np.round(np.mean(cons_esp[cons_esp > 0]), 6)
     temp_list[z] = np.round(np.mean(temp[temp > 0]), 6)
+    print('##########################################')
     print('Media thermal GRUPO', z, kpi[z])
     print('Media consumo_esp GRUPO', z, Q[z])
     print('Media temp GRUPO', z, temp_list[z])
