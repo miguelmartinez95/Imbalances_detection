@@ -264,7 +264,7 @@ def create_matrix(var_sum, diff_mean):
     return matrix, df
 
 
-def environment_analisis(diff, consumos, pisos, letras, portales,nombres):
+def environment_analysis(diff, consumos, pisos, letras, portales,nombres):
     '''
     '''
 
