@@ -124,9 +124,8 @@ def data_structure(path, agregado, start, end, bloques, bloque):
         for t in range(2):
             cp2 = sep1.join([cp, year[t]])
             consumos = to_number(
-                pd.read_csv(sep1.join([cp2, 'consumos.csv']), decimal=',', sep=';', index_col=0, encoding='latin-1'))
-            t_int = to_number(pd.read_csv(sep1.join([cp2, 'temperatures.csv']), decimal='.', sep=';', index_col=0,
-                                          encoding='latin-1'))
+                pd.read_csv(sep1.join([cp2, 'consumos.csv']), decimal=',', sep=';', index_col=0))
+            t_int = to_number(pd.read_csv(sep1.join([cp2, 'temperatures.csv']), decimal=',', sep=';', index_col=0))
             t_out = to_number(pd.read_csv(sep1.join([cp2, 't_exterior.csv']), decimal=',', sep=';'))
             radiation = to_number(pd.read_csv(sep1.join([cp2, 'radiation.csv']), decimal=',', sep=';'))
 
