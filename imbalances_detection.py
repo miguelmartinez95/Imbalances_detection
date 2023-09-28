@@ -14,7 +14,7 @@ from functions import data_structure, calculate_dt, check_data, check_diff, calc
 from functions import detec_out_days, acumulated, create_matrix, environment,environment_analysis
 from functions import deletion, delete_dwellings_no_cons, delete_missing_env
 from functions import test_data, clustering, plot_environment, detection_imbalances, info_detections, \
-    create_dataframe, bar_line_plot
+    create_dataframe, bar_line_plot, temporal_plot
 
 #Localización de datos
 path=r'E:\Documents\Doctorado\PAPERS\Paper_vivienda_social_Victoria\Paper\Imbalance_detection'
@@ -138,3 +138,6 @@ Q_final = np.concatenate((Q_group, Q_red, Q_green)).reshape(-1, 1)
 df_final = create_dataframe(kpi_final, temp_final, Q_final, grupos)
 # Creamos gráficos donde junstamos la comparación del KPI y los saltos térmicos y los consumos específicos con los saltos térmicos
 bar_line_plot(edificio, df_final, save_results, path, year)
+
+# Creamos un gráfico temporal analizando los consumos y saltos térmicos de los pisos detectados
+temporal_plot(edificio, dates, var_con, diff, grupos, lista, [imb1, imb2], save_results, path, year, smooth)

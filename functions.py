@@ -42,7 +42,7 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
     ax1.set_xlabel('')
     ax1.tick_params(axis='x', labelsize=16)
     ax1.tick_params(axis='y', labelsize=22)
-    ax1.set_ylim([0, np.max(df[var])+int(np.max(df[var])/5)])
+    ax1.set_ylim([0, np.max(df[var])+int(np.max(df[var])/4)])
     if order == 2:
         for i, thisbar in enumerate(g.patches):
             # Set a different hatch for each bar
@@ -53,7 +53,7 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
                   palette=['blue', 'red', 'green'], marksize=2, scale=1.2)
     ax2.set_ylabel(y_lab2, fontsize=21)
     ax2.set_xlabel('')
-    ax2.set_ylim([0, np.max(df['Temp'])+int(np.max(df['Temp'])/5)])
+    ax2.set_ylim([0, np.max(df['Temp'])+int(np.max(df['Temp'])/4)])
     ax2.tick_params(axis='x', labelsize=16)
     ax2.tick_params(axis='y', labelsize=22)
     ax2.get_legend().remove()
@@ -827,6 +827,89 @@ def create_dataframe(kpi, temp, Q, grupos):
                                                                                               errors='coerce', axis=1)
     df_final.replace(0, np.nan, inplace=True)
     return df_final
+
+def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_results,path,year, smooth):
+    '''
+
+    :param dates: serie para las fechas
+    :param var: variable para gráficar
+    :param diff: salto térmico de los pisos con el exterior
+    :param grupos: número de grupos a buscar por k-means ([] calculamos el número óptimo)
+    :param lista: lista con los números de los pisos que forma cada grupo
+    :param imbalances: lista con los pisos detectados para las imbalances [0] imbalance type 1 [1] imbalance type 2
+    :param save_results: queremos guardar los gráficos?
+    :param path: donde guardarlos
+    :param year: año donde se empieza el análisis
+    :return: gráfico temporal analizando los consumos de los pisos detectados en comparación con los grupos.
+    '''
+    for t in range(grupos):
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 9))
+        kpi, temps = var.iloc[:, lista[t]], diff.iloc[:, lista[t]]
+        kpi.index = dates
+        ##################################################
+        #Force NaN in dates that are not considered
+        st = dates[0]
+        end = dates[len(dates)-1]
+        new = pd.date_range(st, end, freq='H')
+        kpi_new = kpi.reindex(new)
+        kpi_new = kpi_new.replace(np.nan, 99999)
+        ##################################################
+        #Resample for smothing the data in the plot
+        if smooth[0]==True:
+            kpi_new=kpi_new.resample(smooth[1]).sum() #suma sería
+            kpi_new = kpi_new.where(kpi_new <100, np.nan)
+            temps.index = dates
+            temps=temps.resample(smooth[1]).mean()
+        else:
+            kpi_new = kpi_new.where(kpi_new < 100, np.nan)
+
+        ax1.plot(kpi_new*1000, color='grey',label='Normal')
+        ax2.plot(temps, color='grey',label='Normal')
+
+        #Destacamos detecciones si las hay
+        if len(imbalances[0][t]):
+            kpi1, temps1 = kpi_new.iloc[:, imbalances[0][t]], temps.iloc[:, imbalances[0][t]]
+            ax1.plot(kpi_new.index, kpi1*1000, color='red', linewidth=2, label='Imbalance 1')
+            ax2.plot(temps.index, temps1, color='red', linewidth=2,label='Imbalance 1')
+
+        if len(imbalances[1][t]):
+            kpi2, temps2 = kpi_new.iloc[:, imbalances[1][t]], temps.iloc[:, imbalances[1][t]]
+            ax1.plot(kpi_new.index, kpi2*1000, color='green', linewidth=2, label='Imbalance 2')
+            ax2.plot(temps.index, temps2, color='green', linewidth=2, label='Imbalance 2')
+
+        ax1.set_ylabel(r'(W/(h $\cdot$ m $^{2}$)', fontsize=23)
+        ax1.set_xlabel('Time', fontsize=20, labelpad=8)
+        ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        ax1.xaxis.set_major_locator(mdates.DayLocator(interval=15))
+        ax1.tick_params('x', labelsize=15, labelrotation=45)
+        ax1.tick_params('y', labelsize=15)
+
+        handles, labels = ax1.get_legend_handles_labels()
+        by_label = dict(zip(labels, handles))
+        ax1.legend(by_label.values(), by_label.keys(),fontsize=12)
+
+        ax2.set_ylim([-1, 250])
+        ax2.set_ylabel(r'$\Delta$ T ($^\circ$C)', fontsize=23)
+        ax2.set_xlabel('Time', fontsize=20, labelpad=8)
+        ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        ax2.xaxis.set_major_locator(mdates.DayLocator(interval=15))
+        ax2.tick_params('x', labelsize=15, labelrotation=45)
+        ax2.tick_params('y', labelsize=15)
+        ax2.set_ylim([2, 26])
+        fig.suptitle('Grupo '+str(t), fontsize=22)
+        handles, labels = ax2.get_legend_handles_labels()
+        by_label = dict(zip(labels, handles))
+        ax2.legend(by_label.values(), by_label.keys(), fontsize=12)
+        plt.tight_layout(pad=4)
+        plt.draw()
+        plt.pause(0.001)
+
+        if save_results == True:
+            sep = '\\'
+            pp = sep.join([path, year])
+            plt.savefig(pp + '\\' + edificio + '_g' + str(t) + 'temporal' + '.png')
+            plt.ion()
+            plt.show(block=False)
 
 
 def deletion(matrix, var_con_sum, nombres, horas, out, datos_sotano,portales,letras,pisos):
