@@ -121,6 +121,13 @@ def data_structure(path, agregado, start, end, bloques, bloque):
         t_int = t_int.iloc[range(stop + 1)]
         radiation = radiation.iloc[range(stop + 1)]
         t_int = t_int.replace(',', '.', regex=True)
+
+        place = np.where(bloques == bloque)[0]
+        original = pd.DataFrame(consumos)
+        t_int_original = pd.DataFrame(t_int)
+        consumos = original.iloc[:, place]
+        t_int = t_int_original.iloc[:, place]
+
     else:
         for t in range(2):
             cp2 = sep1.join([cp, year[t]])
