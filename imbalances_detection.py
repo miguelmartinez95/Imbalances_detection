@@ -103,10 +103,10 @@ diff_mean_complete, var_sum_complete, var_con_sum_complete = acumulated(diff_com
 ####################################################################
 matrix, df = create_matrix(var_sum, diff_mean)
 matrix_complete, df_complete = create_matrix(var_sum_complete, diff_mean_complete)
-matrix = environment(df, matrix, var_con, diff, var_con_sum,letras,pisos,portales, nombres, horas, datos_sotanos)
+matrix= environment(df, matrix,letras,pisos,portales)
 
 # Delete empty dwellings
-matrix, var_con_sum, nombres, horas = deletion(matrix, var_con_sum, nombres, horas, out_empty)
+matrix, var_con_sum, nombres, horas = deletion(matrix, var_con_sum, nombres, horas, out_empty, datos_sotanos,portales,letras,pisos)
 
 # Eliminamos del análisis pisos con muy pocas horas de consumo
 matrix, var_con_sum, nombres = delete_dwellings_no_cons(horas, matrix, var_con_sum, nombres, min_horas)

@@ -446,7 +446,7 @@ def d_medios(portales,letras):
     ar_medios = np.concatenate(ar)
     return ar_medios
 
-def environment(df, matrix,var_con, diff, var_con_sum,letras,pisos,portales, nombres, horas, datos_sotano):
+def environment(df, matrix,letras,pisos,portales):
     portal = 1
     piso = 1
     mask_cosumo = -0.01
@@ -556,22 +556,8 @@ def environment(df, matrix,var_con, diff, var_con_sum,letras,pisos,portales, nom
             portal += 1
 
     # Eliminación de los bajos debido a la falta de datos de sus entornos
-    if datos_sotano==False:
-        g,g2 = 0,0
-        ar = list()
-        while g < (portales):
-            ar.append(np.arange(0+g2,0+letras+g2))
-            g += 1
-            g2 += letras * pisos
-        ar = np.concatenate(ar)
-        matrix = np.delete(matrix, ar, 0)
-        var_con = var_con.drop(var_con.columns[ar], axis=1)
-        diff = diff.drop(diff.columns[ar], axis=1)
-        var_con_sum = var_con_sum.drop(var_con_sum.index[ar], axis=0)
-        nombres = np.delete(nombres, ar, 0)
-        horas = horas.drop(horas.index[ar], axis=0)
 
-    return matrix, var_con, diff, var_con_sum, nombres, horas
+    return matrix
 
 
 def delete_dwellings_no_cons(horas, matrix, var_con_sum, nombres,min_horas):
@@ -843,7 +829,7 @@ def create_dataframe(kpi, temp, Q, grupos):
     return df_final
 
 
-def deletion(matrix, var_con_sum, nombres, horas, out):
+def deletion(matrix, var_con_sum, nombres, horas, out, datos_sotano,portales,letras,pisos):
     print('Dwellings with too much empty cells: ', nombres[out])
 
     if len(out) > 0:
@@ -851,6 +837,19 @@ def deletion(matrix, var_con_sum, nombres, horas, out):
         var_con_sum = var_con_sum.drop(var_con_sum.index[out])
         horas = horas.drop(horas.index[out], axis=0)
         nombres = np.delete(nombres, out)
+
+    if datos_sotano==False:
+        g,g2 = 0,0
+        ar = list()
+        while g < (portales):
+            ar.append(np.arange(0+g2,0+letras+g2))
+            g += 1
+            g2 += letras * pisos
+        ar = np.concatenate(ar)
+        matrix = np.delete(matrix, ar, 0)
+        var_con_sum = var_con_sum.drop(var_con_sum.index[ar], axis=0)
+        nombres = np.delete(nombres, ar, 0)
+        horas = horas.drop(horas.index[ar], axis=0)
 
     return matrix, var_con_sum, nombres, horas
 
