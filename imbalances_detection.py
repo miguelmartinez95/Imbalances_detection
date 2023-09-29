@@ -95,9 +95,15 @@ var, var_con, diff,dates = detec_out_days(dates, var, var_con, diff, radiation, 
 horas = pd.DataFrame(var_con > 0).sum(axis=0)
 horas_complete = pd.DataFrame(var_con_complete > 0).sum(axis=0)
 
-diff_mean, var_sum, var_con_sum = acumulated(diff, var * 1000, var_con * 1000, nombres, horas)
-diff_mean_complete, var_sum_complete, var_con_sum_complete = acumulated(diff_complete, var_complete * 1000,
-                                                                        var_con_complete * 1000, nombres_complete,
+#Tranformaciones en W
+var= var*1000
+var_con = var_con*1000
+var_complete = var_complete*1000
+var_con_complete=var_con_complete*1000
+
+diff_mean, var_sum, var_con_sum = acumulated(diff, var, var_con, nombres, horas)
+diff_mean_complete, var_sum_complete, var_con_sum_complete = acumulated(diff_complete, var_complete,
+                                                                        var_con_complete, nombres_complete,
                                                                         horas_complete)
 
 

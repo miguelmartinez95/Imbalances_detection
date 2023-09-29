@@ -889,19 +889,20 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
         ax1.xaxis.set_major_locator(mdates.DayLocator(interval=15))
         ax1.tick_params('x', labelsize=15, labelrotation=45)
         ax1.tick_params('y', labelsize=15)
+        ax1.set_ylim([-1, np.max(kpi_new)+int(np.max(kpi_new)+np.max(kpi_new)/1.75)])
 
         handles, labels = ax1.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
         ax1.legend(by_label.values(), by_label.keys(),fontsize=12,loc='upper right')
 
-        ax2.set_ylim([-1, 250])
+
         ax2.set_ylabel(r'$\Delta$ T ($^\circ$C)', fontsize=23)
         ax2.set_xlabel('Time', fontsize=20, labelpad=8)
         ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
         ax2.xaxis.set_major_locator(mdates.DayLocator(interval=15))
         ax2.tick_params('x', labelsize=15, labelrotation=45)
         ax2.tick_params('y', labelsize=15)
-        ax2.set_ylim([2, 26])
+        ax1.set_ylim([-1, np.max(temps)+int(np.max(temps)+np.max(temps)/1.75)])
         fig.suptitle('Grupo '+str(t), fontsize=22)
         handles, labels = ax2.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
