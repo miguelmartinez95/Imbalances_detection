@@ -599,13 +599,13 @@ def plot_environment(df_entorno, grupos, cluster, save_results, path, year, edif
         plt.draw()
         plt.pause(0.001)
 
-#        if save_results == True:
-#            sep = '\\'
-#            pp = sep.join([path, 'Graficos'])
-#       #     pp = sep.join([pp, year])
-#            plt.savefig(pp + '\\' + edificio + '_g' + str(t) + '.png')
-#            plt.ion()
-#            plt.show(block=False)
+        if save_results == True:
+            sep = '\\'
+            pp = sep.join([path, 'Graficos'])
+            pp = sep.join([pp, year])
+            plt.savefig(pp + '\\' + edificio + '_g' + str(t) + '.png')
+            plt.ion()
+            plt.show(block=False)
 
     return lista
 
