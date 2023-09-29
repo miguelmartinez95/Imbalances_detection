@@ -891,11 +891,9 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
         ax1.tick_params('y', labelsize=15)
         max=kpi.dropna().to_numpy().max()
         ax1.set_ylim([-1, max+max/3])
-
         handles, labels = ax1.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
         ax1.legend(by_label.values(), by_label.keys(),fontsize=12,loc='upper right')
-
 
         ax2.set_ylabel(r'$\Delta$ T ($^\circ$C)', fontsize=23)
         ax2.set_xlabel('Time', fontsize=20, labelpad=8)
