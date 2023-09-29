@@ -34,7 +34,7 @@ letras=3
 portales=3
 pisos=8  #derechos 8 villabuena 6
 datos_sotanos = False
-save_results=False
+save_results=True
 #smoothing for the temporal plot
 smooth = [True, '3H']
 
@@ -125,7 +125,7 @@ cluster = clustering(df_entorno, grupos)
 lista = plot_environment(df_entorno, grupos, cluster, save_results, path, year, bloque)
 
 kpi_group, kpi_red, kpi_green, t_group, t_red, t_green, Q_group, Q_red, Q_green, detection_sup, detection_inf,imbalances_ind = detection_imbalances(
-    df_piso, var_con_sum, lista, nombres, path, year, save_results)
+    df_piso, var_con_sum, lista, nombres, path, year, bloque,save_results)
 
 # Printeamos los pisos que forman cada grupos además de los pisos detectados en las posibles descompesaciones
 info_detections(grupos, lista, nombres, detection_sup, detection_inf)

@@ -79,7 +79,8 @@ def bar_line_plot(edificio, df, save_results, path, year):
 
     if save_results == True:
         sep = '\\'
-        pp = sep.join([path, year])
+        pp = sep.join([path, 'Graficos'])
+        pp = sep.join([pp, year])
         plt.savefig(pp + '\\' + edificio + '_g' + 'comparison' + '.png')
         plt.ion()
         plt.show(block=False)
@@ -598,12 +599,13 @@ def plot_environment(df_entorno, grupos, cluster, save_results, path, year, edif
         plt.draw()
         plt.pause(0.001)
 
-        if save_results == True:
-            sep = '\\'
-            pp = sep.join([path, year])
-            plt.savefig(pp + '\\' + edificio + '_g' + str(t) + '.png')
-            plt.ion()
-            plt.show(block=False)
+#        if save_results == True:
+#            sep = '\\'
+#            pp = sep.join([path, 'Graficos'])
+#       #     pp = sep.join([pp, year])
+#            plt.savefig(pp + '\\' + edificio + '_g' + str(t) + '.png')
+#            plt.ion()
+#            plt.show(block=False)
 
     return lista
 
@@ -692,7 +694,7 @@ def plot_conditions(thermal, temp, z):
     return ax1, ax2, fig
 
 
-def drawn_limits(fig, ax1, ax2, thermal_mean_i1, temp_mean_i1, thermal_mean_i2, temp_mean_i2, path, year,save_results):
+def drawn_limits(fig, ax1, ax2, thermal_mean_i1, temp_mean_i1, thermal_mean_i2, temp_mean_i2, path, year,save_results, edificio,z):
     # Limit imbalance i1
     ax1.axvline(x=thermal_mean_i1, linewidth=2, color='red')
     ax2.axvline(x=temp_mean_i1, linewidth=2, color='red')
@@ -703,7 +705,8 @@ def drawn_limits(fig, ax1, ax2, thermal_mean_i1, temp_mean_i1, thermal_mean_i2, 
     fig.tight_layout(pad=2.0)
     if save_results == True:
         sep = '\\'
-        pp = sep.join([path, year])
+        pp = sep.join([path, 'Graficos'])
+        pp = sep.join([pp, year])
         plt.savefig(pp + '\\' + edificio + '_g' + str(z) + 'detec' + '.png')
 
 
@@ -909,7 +912,8 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
 
         if save_results == True:
             sep = '\\'
-            pp = sep.join([path, year])
+            pp  =sep.join([path, 'Graficos'])
+            pp = sep.join([pp, year])
             plt.savefig(pp + '\\' + edificio + '_g' + str(t) + 'temporal' + '.png')
             plt.ion()
             plt.show(block=False)
@@ -940,7 +944,7 @@ def deletion(matrix, var_con_sum, nombres, horas, out, datos_sotano,portales,let
     return matrix, var_con_sum, nombres, horas
 
 
-def detection_imbalances(df_piso, var_con_sum, lista,nombres,path,year,save_results):
+def detection_imbalances(df_piso, var_con_sum, lista,nombres,path,year,bloque,save_results):
     detection_sup = []
     detection_inf = []
     df_piso.iloc[np.where(df_piso.iloc[:, 0] < 0)[0], 0] = np.repeat(-0.01, len(np.where(df_piso.iloc[:, 0] < 0)[0]))
@@ -1019,7 +1023,7 @@ def detection_imbalances(df_piso, var_con_sum, lista,nombres,path,year,save_resu
         #          np.round(np.mean(cons_esp.iloc[candidates_final][cons_esp.iloc[candidates_final] > 0]), 6))
 
         # Limite para las descompensaciones TIPO 1 y 2
-        drawn_limits(fig, ax1, ax2, thermal_mean_i1, temp_mean_i1, thermal_mean_i2, temp_mean_i2, path, year,save_results)
+        drawn_limits(fig, ax1, ax2, thermal_mean_i1, temp_mean_i1, thermal_mean_i2, temp_mean_i2, path, year,save_results,bloque,z)
         imbalances_ind=  [imb1, imb2]
 
     return kpi_group, kpi_red, kpi_green, t_group, t_red, t_green, Q_group, Q_red, Q_green, detection_sup, detection_inf, imbalances_ind
