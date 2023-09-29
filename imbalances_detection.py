@@ -137,7 +137,7 @@ Q_final = np.concatenate((Q_group, Q_red, Q_green)).reshape(-1, 1)
 
 df_final = create_dataframe(kpi_final, temp_final, Q_final, grupos)
 # Creamos gráficos donde junstamos la comparación del KPI y los saltos térmicos y los consumos específicos con los saltos térmicos
-bar_line_plot(edificio, df_final, save_results, path, year)
+bar_line_plot(bloque, df_final, save_results, path, year)
 
 # Creamos un gráfico temporal analizando los consumos y saltos térmicos de los pisos detectados
-temporal_plot(edificio, dates, var_con, diff, grupos, lista, imbalances_ind, save_results, path, year, smooth)
+temporal_plot(bloque, dates, var_con, diff, grupos, lista, imbalances_ind, save_results, path, year, smooth)

@@ -81,7 +81,7 @@ def bar_line_plot(edificio, df, save_results, path, year):
         sep = '\\'
         pp = sep.join([path, 'Graficos'])
         pp = sep.join([pp, year])
-        plt.savefig(pp + '\\' + edificio + '_g' + 'comparison' + '.png')
+        plt.savefig(pp + '\\' + edificio  + 'comparison' + '.png')
         plt.ion()
         plt.show(block=False)
 
