@@ -219,7 +219,7 @@ def calculate_kpi(consumos, diffT, m2):
     return var, var_con
 
 
-def detec_out_days(var, var_con, diff, radiation, t_ext):
+def detec_out_days(dates,var, var_con, diff, radiation, t_ext):
     ndias = int(len(var.index) / 24)
     rad_split = np.split(radiation, ndias)
     te_split = np.split(t_ext, ndias)
@@ -244,6 +244,7 @@ def detec_out_days(var, var_con, diff, radiation, t_ext):
         var_con = var_con.reset_index(drop=True)
         diff = diff.drop(diff.index[ind_out], axis=0)
         diff = diff.reset_index(drop=True)
+        dates =np.delete(dates, ind_out)
 
     days = int(diff.shape[0] / 24)
     print('TOTAL DAYS ANALYSED:', days)

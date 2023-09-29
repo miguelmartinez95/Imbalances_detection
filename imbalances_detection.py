@@ -89,7 +89,7 @@ var_complete, var_con_complete = calculate_kpi(complete, diffT_complete, m2_comp
 '''
 Detección de días con un nivel de radiación por debajo de un nivel
 '''
-var, var_con, diff = detec_out_days(var, var_con, diff, radiation, t_ext.loc[:, 'temp'])
+var, var_con, diff,dates = detec_out_days(dates, var, var_con, diff, radiation, t_ext.loc[:, 'temp'])
 
 # Calculo de valores concretos para cada piso y para cada variable
 horas = pd.DataFrame(var_con > 0).sum(axis=0)
