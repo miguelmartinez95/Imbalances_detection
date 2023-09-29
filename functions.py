@@ -42,7 +42,7 @@ def two_scales(df, ax1, var, var_lab, y_lab1, y_lab2, order):
     ax1.set_xlabel('')
     ax1.tick_params(axis='x', labelsize=16)
     ax1.tick_params(axis='y', labelsize=22)
-    ax1.set_ylim([0, np.max(df[var])+int(np.max(df[var])/3)])
+    ax1.set_ylim([0, np.max(df[var])+int(np.max(df[var])/2)])
     if order == 2:
         for i, thisbar in enumerate(g.patches):
             # Set a different hatch for each bar
