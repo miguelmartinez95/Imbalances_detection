@@ -617,7 +617,7 @@ def clustering(df_entorno, grupos):
             "init": "random",
             "n_init": 100,
             "max_iter": 500,
-            "random_state": 777,
+            "random_state": 6,
         }
 
         Sum_of_squared_distances = []
@@ -632,11 +632,11 @@ def clustering(df_entorno, grupos):
         c = []
         z = 'no final'
         for i in range(len(D) - 1):
-            if D[i + 1] / D[i] < 0.50:
+            if D[i + 1] / D[i] < 0.60:
                 z = 'success'
                 print('Optimal number of groups:', K[i + 1])
                 break
-            elif D[i + 1] / D[i] < 0.70:
+            elif D[i + 1] / D[i] < 0.75:
                 c.append(i + 1)
 
         if z == 'no final' and len(c) > 0:
