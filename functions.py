@@ -248,7 +248,7 @@ def detec_out_days(dates,var, var_con, diff, radiation, t_ext):
 
     days = int(diff.shape[0] / 24)
     print('TOTAL DAYS ANALYSED:', days)
-    return var, var_con, diff
+    return var, var_con, diff, dates
 
 
 def acumulated(diff, var, var_con, nombres, horas):
