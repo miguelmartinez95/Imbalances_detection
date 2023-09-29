@@ -869,18 +869,18 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
         else:
             kpi_new = kpi_new.where(kpi_new < 100, np.nan)
 
-        ax1.plot(kpi_new*1000, color='grey',label='Normal')
+        ax1.plot(kpi_new, color='grey',label='Normal')
         ax2.plot(temps, color='grey',label='Normal')
 
         #Destacamos detecciones si las hay
         if len(imbalances[0][t]):
             kpi1, temps1 = kpi_new.iloc[:, imbalances[0][t]], temps.iloc[:, imbalances[0][t]]
-            ax1.plot(kpi_new.index, kpi1*1000, color='red', linewidth=2, label='Imbalance 1')
+            ax1.plot(kpi_new.index, kpi1, color='red', linewidth=2, label='Imbalance 1')
             ax2.plot(temps.index, temps1, color='red', linewidth=2,label='Imbalance 1')
 
         if len(imbalances[1][t]):
             kpi2, temps2 = kpi_new.iloc[:, imbalances[1][t]], temps.iloc[:, imbalances[1][t]]
-            ax1.plot(kpi_new.index, kpi2*1000, color='green', linewidth=2, label='Imbalance 2')
+            ax1.plot(kpi_new.index, kpi2, color='green', linewidth=2, label='Imbalance 2')
             ax2.plot(temps.index, temps2, color='green', linewidth=2, label='Imbalance 2')
 
         ax1.set_ylabel(r'(W/(h $\cdot$ m $^{2}$)', fontsize=23)
@@ -892,7 +892,7 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
 
         handles, labels = ax1.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
-        ax1.legend(by_label.values(), by_label.keys(),fontsize=12)
+        ax1.legend(by_label.values(), by_label.keys(),fontsize=12,loc='upper right')
 
         ax2.set_ylim([-1, 250])
         ax2.set_ylabel(r'$\Delta$ T ($^\circ$C)', fontsize=23)
@@ -905,7 +905,7 @@ def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_res
         fig.suptitle('Grupo '+str(t), fontsize=22)
         handles, labels = ax2.get_legend_handles_labels()
         by_label = dict(zip(labels, handles))
-        ax2.legend(by_label.values(), by_label.keys(), fontsize=12)
+        ax2.legend(by_label.values(), by_label.keys(), fontsize=12, loc='upper right')
         plt.tight_layout(pad=4)
         plt.draw()
         plt.pause(0.001)
