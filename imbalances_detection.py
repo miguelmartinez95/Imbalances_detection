@@ -124,7 +124,7 @@ cluster = clustering(df_entorno, grupos)
 
 lista = plot_environment(df_entorno, grupos, cluster, save_results, path, year, bloque)
 
-kpi_group, kpi_red, kpi_green, t_group, t_red, t_green, Q_group, Q_red, Q_green, detection_sup, detection_inf = detection_imbalances(
+kpi_group, kpi_red, kpi_green, t_group, t_red, t_green, Q_group, Q_red, Q_green, detection_sup, detection_inf,imbalances_ind = detection_imbalances(
     df_piso, var_con_sum, lista, nombres, path, year, save_results)
 
 # Printeamos los pisos que forman cada grupos además de los pisos detectados en las posibles descompesaciones
@@ -140,4 +140,4 @@ df_final = create_dataframe(kpi_final, temp_final, Q_final, grupos)
 bar_line_plot(edificio, df_final, save_results, path, year)
 
 # Creamos un gráfico temporal analizando los consumos y saltos térmicos de los pisos detectados
-temporal_plot(edificio, dates, var_con, diff, grupos, lista, [imb1, imb2], save_results, path, year, smooth)
+temporal_plot(edificio, dates, var_con, diff, grupos, lista, imbalances_ind, save_results, path, year, smooth)

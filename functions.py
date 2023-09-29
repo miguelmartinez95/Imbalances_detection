@@ -1017,8 +1017,9 @@ def detection_imbalances(df_piso, var_con_sum, lista,nombres,path,year,save_resu
 
         # Limite para las descompensaciones TIPO 1 y 2
         drawn_limits(fig, ax1, ax2, thermal_mean_i1, temp_mean_i1, thermal_mean_i2, temp_mean_i2, path, year,save_results)
+        imbalances_ind=  [imb1, imb2]
 
-    return kpi_group, kpi_red, kpi_green, t_group, t_red, t_green, Q_group, Q_red, Q_green, detection_sup, detection_inf
+    return kpi_group, kpi_red, kpi_green, t_group, t_red, t_green, Q_group, Q_red, Q_green, detection_sup, detection_inf, imbalances_ind
 
 
 def check_data(data, type):
