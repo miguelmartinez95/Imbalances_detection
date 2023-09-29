@@ -830,6 +830,7 @@ def create_dataframe(kpi, temp, Q, grupos):
     return df_final
 
 def temporal_plot(edificio, dates, var, diff, grupos, lista, imbalances,save_results,path,year, smooth):
+    import matplotlib.dates as mdates
     '''
 
     :param dates: serie para las fechas
