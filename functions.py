@@ -632,9 +632,9 @@ def clustering(df_entorno, grupos):
         c = []
         z = 'no final'
         for i in range(len(D) - 1):
-            if D[i + 1] / D[i] < 0.60:
+            if D[i + 1] / D[i] < 0.55:
                 z = 'success'
-                print('Optimal number of groups:', K[i + 1])
+                print('Optimal number of groups:', K[i + 2])
                 break
             elif D[i + 1] / D[i] < 0.75:
                 c.append(i + 1)
