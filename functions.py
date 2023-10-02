@@ -690,10 +690,6 @@ def plot_conditions(thermal, temp, z):
 
     return ax1, ax2, fig
 
-
-    return ax1, ax2, fig
-
-
 def drawn_limits(fig, ax1, ax2, thermal_mean_i1, temp_mean_i1, thermal_mean_i2, temp_mean_i2, path, year,save_results, edificio,z):
     # Limit imbalance i1
     ax1.axvline(x=thermal_mean_i1, linewidth=2, color='red')
